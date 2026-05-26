@@ -31,6 +31,7 @@ import (
 	k8stypes "k8s.io/apimachinery/pkg/types"
 	corev1 "k8s.io/api/core/v1"
 	storagev1 "k8s.io/api/storage/v1"
+	snapv1 "github.com/kubernetes-csi/external-snapshotter/client/v8/apis/volumesnapshot/v1"
 	"sigs.k8s.io/controller-runtime/pkg/client/config"
 	"sigs.k8s.io/controller-runtime/pkg/manager"
 
@@ -86,6 +87,9 @@ func getGlobalScheme(ctx context.Context) *runtime.Scheme {
 		}
 		if err := storagev1.AddToScheme(globalScheme); err != nil {
 			log.Errorf("failed to add storagev1 to global scheme: %+v", err)
+		}
+		if err := snapv1.AddToScheme(globalScheme); err != nil {
+			log.Errorf("failed to add snapv1 to global scheme: %+v", err)
 		}
 
 		// Add all other schemes sequentially to avoid race conditions

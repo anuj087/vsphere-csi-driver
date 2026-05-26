@@ -37,6 +37,8 @@ var expectedRegisteredKinds = []schema.GroupVersionKind{
 	{Group: "", Version: "v1", Kind: "PersistentVolumeClaim"},
 	// storagev1
 	{Group: "storage.k8s.io", Version: "v1", Kind: "StorageClass"},
+	// snapv1
+	{Group: "snapshot.storage.k8s.io", Version: "v1", Kind: "VolumeSnapshot"},
 	// cnsoperatorv1alpha1
 	{Group: "cns.vmware.com", Version: "v1alpha1", Kind: "CnsVolumeMetadata"},
 	// csinodetopologyv1alpha1
