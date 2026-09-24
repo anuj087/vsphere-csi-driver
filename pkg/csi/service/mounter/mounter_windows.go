@@ -317,8 +317,8 @@ func (mounter *csiProxyMounter) FormatAndMount(ctx context.Context, source strin
 	// TODO: consider partitions and choose the right partition.
 	// For now just choose the first volume.
 	volumeID := volumeIdResponse.VolumeIDs[0]
-	log.Infof("volumeIdResponse : %v", volumeIdResponse)
-	log.Infof("volumeID : %s", volumeID)
+	log.Infof("volumeIdResponse: %v", volumeIdResponse)
+	log.Infof("volumeID: %s", volumeID)
 	// Check if the volume is formatted.
 	isVolumeFormattedRequest := &volume.IsVolumeFormattedRequest{
 		VolumeID: volumeID,
@@ -330,7 +330,7 @@ func (mounter *csiProxyMounter) FormatAndMount(ctx context.Context, source strin
 
 	// If the volume is not formatted, then format it, else proceed to mount.
 	if !isVolumeFormattedResponse.Formatted {
-		log.Infof("volumeID is not formatted : %s", volumeID)
+		log.Infof("volumeID is not formatted: %s", volumeID)
 		formatVolumeRequest := &volume.FormatVolumeRequest{
 			VolumeID: volumeID,
 			// TODO: Accept the filesystem and other options

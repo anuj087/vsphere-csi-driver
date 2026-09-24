@@ -377,8 +377,8 @@ func (r *ReconcileCnsRegisterVolume) Reconcile(ctx context.Context,
 		pvName, found := commonco.ContainerOrchestratorUtility.GetPVNameFromCSIVolumeID(volInfo.VolumeID.Id)
 		if found {
 			if pvName != staticPvNamePrefix+volInfo.VolumeID.Id {
-				msg := fmt.Sprintf("PV: %q with the volume ID: %q for volume path: %q"+
-					"is already present. Can not create multiple PV with same disk.", pvName, volInfo.VolumeID.Id,
+				msg := fmt.Sprintf("PV: %q with the volume ID: %q for volume path: %q "+
+					"is already present. Cannot create multiple PVs with the same disk.", pvName, volInfo.VolumeID.Id,
 					instance.Spec.DiskURLPath)
 				log.Errorf(msg)
 				setInstanceError(ctx, r, instance, msg)
@@ -522,7 +522,7 @@ func (r *ReconcileCnsRegisterVolume) Reconcile(ctx context.Context,
 				activeClusters, err := commonco.ContainerOrchestratorUtility.
 					GetActiveClustersForNamespaceInRequestedZones(ctx, request.Namespace, zones)
 				if err != nil {
-					msg := fmt.Sprintf("Failed to get active clusters for CnsRegisterVolume request. error: %+v", err)
+					msg := fmt.Sprintf("Failed to get active clusters for CnsRegisterVolume request. Error: %+v", err)
 					log.Error(msg)
 					setInstanceError(ctx, r, instance, msg)
 					return reconcile.Result{RequeueAfter: timeout}, nil
@@ -1304,7 +1304,7 @@ func validateCnsRegisterVolumeSpec(ctx context.Context, instance *cnsregistervol
 			if found {
 				if pvName != staticPvNamePrefix+instance.Spec.VolumeID {
 					msg = fmt.Sprintf("PV: %q with the volume ID: %q "+
-						"is already present. Can not create multiple PV with same volume Id.", pvName, instance.Spec.VolumeID)
+						"is already present. Cannot create multiple PVs with the same volume ID.", pvName, instance.Spec.VolumeID)
 				}
 			}
 		}

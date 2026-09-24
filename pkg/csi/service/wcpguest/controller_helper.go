@@ -165,7 +165,7 @@ func checkForSupervisorPVCCondition(ctx context.Context, client clientset.Interf
 			Watch:          true,
 		})
 	if err != nil {
-		errMsg := fmt.Errorf("failed to watch supervisor PersistentVolumeClaim %s in namespace %s with Error: %+v",
+		errMsg := fmt.Errorf("failed to watch supervisor PersistentVolumeClaim %s in namespace %s. Error: %+v",
 			pvcName, ns, err)
 		log.Error(errMsg)
 		return errMsg
@@ -495,7 +495,7 @@ func isPVCInSupervisorClusterBound(ctx context.Context, client clientset.Interfa
 			Watch:          true,
 		})
 	if err != nil {
-		errMsg := fmt.Errorf("failed to watch PersistentVolumeClaim %s with Error: %v", pvcName, err)
+		errMsg := fmt.Errorf("failed to watch PersistentVolumeClaim %s. Error: %v", pvcName, err)
 		log.Error(errMsg)
 		return false, nil, errMsg
 	}
@@ -523,7 +523,7 @@ func patchSupervisorPVCAnnotation(ctx context.Context, client clientset.Interfac
 	log := logger.GetLogger(ctx)
 	updatedJSON, jsonErr := json.Marshal(annotations)
 	if jsonErr != nil {
-		return fmt.Errorf("failed to marshal updated annotation for PVC error: %v", jsonErr)
+		return fmt.Errorf("failed to marshal updated annotation for PVC. Error: %v", jsonErr)
 	}
 
 	escapedKey := strings.ReplaceAll(common.AnnKeyGuestClusterPvc, "/", "~1")

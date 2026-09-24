@@ -56,7 +56,7 @@ func main() {
 	logType := logger.LogLevel(os.Getenv(logger.EnvLoggerLevel))
 	logger.SetLoggerLevel(logType)
 	ctx, log := logger.GetNewContextWithLogger()
-	log.Infof("Version : %s", service.Version)
+	log.Infof("Version: %s", service.Version)
 
 	// Log GOMEMLIMIT if set for memory management visibility
 	if goMemLimit := os.Getenv("GOMEMLIMIT"); goMemLimit != "" {

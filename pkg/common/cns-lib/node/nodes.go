@@ -109,7 +109,7 @@ func (nodes *Nodes) csiNodeAdd(obj interface{}) {
 		nodeUUID = cnsvsphere.GetUUIDFromProviderID(node.Spec.ProviderID)
 		err = nodes.cnsNodeManager.RegisterNode(ctx, nodeUUID, nodeName)
 		if err != nil {
-			log.Errorf("csiNodeAdd: failed for node %q, err=%v", nodeName, err)
+			log.Errorf("csiNodeAdd: failed for node %q, err: %v", nodeName, err)
 			osExit(1)
 		}
 	}
@@ -163,7 +163,7 @@ func (nodes *Nodes) csiNodeDelete(obj interface{}) {
 	nodeName := csiNode.Name
 	err := nodes.cnsNodeManager.UnregisterNode(ctx, nodeName)
 	if err != nil {
-		log.Warnf("csiNodeDelete: failed to unregister node:%q. err=%v", nodeName, err)
+		log.Warnf("csiNodeDelete: failed to unregister node: %q. err: %v", nodeName, err)
 	}
 }
 
@@ -227,6 +227,6 @@ func (nodes *Nodes) GetSharedDatastoresInK8SCluster(ctx context.Context) (
 		log.Errorf("failed to get shared datastores for node VMs. Err: %+v", err)
 		return nil, err
 	}
-	log.Debugf("sharedDatastores : %+v", sharedDatastores)
+	log.Debugf("sharedDatastores: %+v", sharedDatastores)
 	return sharedDatastores, nil
 }

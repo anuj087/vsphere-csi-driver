@@ -792,7 +792,7 @@ func isRestAuthFailure(ctx context.Context, err error) bool {
 // It works in case of both vanilla (including multi-vc) and wcp
 func ReadVCConfigs(ctx context.Context, vc *VirtualCenter) error {
 	log := logger.GetLogger(ctx)
-	log.Infof("Reloading latest VC config from vSphere Config Secret for vcenter: %q", vc.Config.Host)
+	log.Infof("Reloading latest VC config from vSphere Config Secret for vCenter: %q", vc.Config.Host)
 	cfg, err := config.GetConfig(ctx)
 	if err != nil {
 		return logger.LogNewErrorf(log, "failed to read config. Error: %+v", err)
@@ -806,7 +806,7 @@ func ReadVCConfigs(ctx context.Context, vc *VirtualCenter) error {
 		if newvcconfig.Host == vc.Config.Host {
 			newvcconfig.ReloadVCConfigForNewClient = true
 			vc.Config = newvcconfig
-			log.Infof("Successfully set latest VC config for vcenter: %q", vc.Config.Host)
+			log.Infof("Successfully set latest VC config for vCenter: %q", vc.Config.Host)
 			foundVCConfig = true
 			break
 		}
@@ -1104,14 +1104,14 @@ func GetVirtualCenterInstance(ctx context.Context,
 
 		// Unregister all VCs from virtual center manager.
 		if err = virtualcentermanager.UnregisterAllVirtualCenters(ctx); err != nil {
-			log.Errorf("failed to unregister vcenter with virtualCenterManager.")
+			log.Errorf("failed to unregister vCenter with virtualCenterManager.")
 			return nil, err
 		}
 
 		// Register with virtual center manager.
 		vCenterInstance, err = virtualcentermanager.RegisterVirtualCenter(ctx, vcconfig)
 		if err != nil {
-			log.Errorf("failed to register VirtualCenter . Err: %+v", err)
+			log.Errorf("failed to register VirtualCenter. Err: %+v", err)
 			return nil, err
 		}
 
@@ -1160,7 +1160,7 @@ func GetVirtualCenterInstanceForVCenterConfig(ctx context.Context,
 			if err == ErrVCAlreadyRegistered {
 				return nil, ErrVCAlreadyRegistered
 			}
-			return nil, logger.LogNewErrorf(log, "failed to register VirtualCenter %q Err: %+v",
+			return nil, logger.LogNewErrorf(log, "failed to register VirtualCenter %q. Err: %+v",
 				vcconfig.Host, err)
 		}
 		// Connect to VC.

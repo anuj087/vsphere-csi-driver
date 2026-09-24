@@ -1034,7 +1034,7 @@ func InitMetadataSyncer(ctx context.Context, clusterFlavor cnstypes.CnsClusterFl
 				for ; true; <-storageQuotaEnablementTicker.C {
 					ctx, log = logger.GetNewContextWithLogger()
 					if err := initStoragePolicyQuotaReconciler(ctx, metadataSyncer); err != nil {
-						log.Warnf("Error while initializing StoragePolicyQuota reconciler. Err:%+v. "+
+						log.Warnf("Error while initializing StoragePolicyQuota reconciler. Err: %+v. "+
 							"Retry will be triggered at %v",
 							err, time.Now().Add(common.DefaultFeatureEnablementCheckInterval))
 						continue
@@ -1047,8 +1047,8 @@ func InitMetadataSyncer(ctx context.Context, clusterFlavor cnstypes.CnsClusterFl
 				// start periodic sync for storage quota
 				err := initStorageQuotaPeriodicSync(ctx, metadataSyncer)
 				if err != nil {
-					log.Errorf("initStorageQuotaPeriodicSync: Failed to initialize the storagequota "+
-						"periodic sync, with error Error: %v", err)
+					log.Errorf("initStorageQuotaPeriodicSync: Failed to initialize the storage quota "+
+						"periodic sync. Error: %v", err)
 					os.Exit(1)
 				}
 			}
@@ -1062,7 +1062,7 @@ func InitMetadataSyncer(ctx context.Context, clusterFlavor cnstypes.CnsClusterFl
 			for ; true; <-volumeHealthEnablementTicker.C {
 				ctx, log = logger.GetNewContextWithLogger()
 				if err := initVolumeHealthReconciler(ctx, k8sClient, metadataSyncer.supervisorClient); err != nil {
-					log.Warnf("Error while initializing volume health reconciler. Err:%+v. Retry will be triggered at %v",
+					log.Warnf("Error while initializing volume health reconciler. Err: %+v. Retry will be triggered at %v",
 						err, time.Now().Add(common.DefaultFeatureEnablementCheckInterval))
 					continue
 				}
@@ -1077,7 +1077,7 @@ func InitMetadataSyncer(ctx context.Context, clusterFlavor cnstypes.CnsClusterFl
 			for ; true; <-volumeResizeEnablementTicker.C {
 				ctx, log = logger.GetNewContextWithLogger()
 				if err := initResizeReconciler(ctx, k8sClient, metadataSyncer.supervisorClient); err != nil {
-					log.Warnf("Error while initializing volume resize reconciler. Err:%+v. Retry will be triggered at %v",
+					log.Warnf("Error while initializing volume resize reconciler. Err: %+v. Retry will be triggered at %v",
 						err, time.Now().Add(common.DefaultFeatureEnablementCheckInterval))
 					continue
 				}
@@ -1209,13 +1209,13 @@ func initStorageQuotaPeriodicSync(ctx context.Context, metadataSyncer *metadataS
 				sqPeriodicSync)
 			if err != nil {
 				log.Errorf("initStorageQuotaPeriodicSync: failed to fetch StorageQuotaPeriodicSync instance "+
-					" with name %q Error: %+v",
+					"with name %q. Error: %+v",
 					StorageQuotaPeriodicSyncInstanceName, err)
 				return err
 			}
 		} else {
-			log.Errorf("initStorageQuotaPeriodicSync: failed to fetch StorageQuotaPeriodicSync instance"+
-				" with name %q Error: %+v",
+			log.Errorf("initStorageQuotaPeriodicSync: failed to fetch StorageQuotaPeriodicSync instance "+
+				"with name %q. Error: %+v",
 				StorageQuotaPeriodicSyncInstanceName, err)
 			return err
 		}
@@ -1494,7 +1494,7 @@ func calculatePVCReservedForNamespace(ctx context.Context, volumeMap map[string]
 			continue
 		}
 		if pvc.Spec.StorageClassName == nil {
-			log.Debugf("calculatePVCReservedForNamespace: storageclass is not provided for pvc,"+
+			log.Debugf("calculatePVCReservedForNamespace: StorageClass is not provided for PVC,"+
 				" continue processing other PVCs Name: %q, Namespace: %q", pvc.Name, pvc.Namespace)
 			continue
 		}
@@ -1925,8 +1925,8 @@ func fetchPVs(ctx context.Context, metadataSyncer *metadataSyncInformer) (map[st
 // fetchStorageClassToStoragePolicyMapping will fetch storageclass and returns mapping with storagepolicy id
 var fetchStorageClassToStoragePolicyMapping = func(ctx context.Context) (map[string]string, error) {
 	log := logger.GetLogger(ctx)
-	log.Debug("fetchStorageClassToStoragePolicyMapping: Fetching StorageClass and create mapping for storageclass" +
-		"and storagepolicyid")
+	log.Debug("fetchStorageClassToStoragePolicyMapping: Fetching StorageClass and creating mapping for StorageClass" +
+		" and storagePolicyID")
 	// Prepare map of storagepolicyID to storageclassnames.
 	k8sconfig, err := k8s.GetKubeConfig(ctx)
 	if err != nil {
@@ -2250,13 +2250,13 @@ func cnsvolumeoperationrequestCRDeleted(obj interface{}) {
 		storagePolicyUsageInstanceName := ""
 		if isSnapshot {
 			// Fetch StoragePolicyUsage instance for storageClass associated with the snapshot.
-			log.Infof("cnsvolumeoperationrequestCRDeleted: Delete event receieved for snapshot operation "+
-				"with snapshoID %s CnsVolumeOperationRequest: %s",
+			log.Infof("cnsvolumeoperationrequestCRDeleted: Delete event received for snapshot operation "+
+				"with snapshotID %s CnsVolumeOperationRequest: %s",
 				cnsvolumeoperationrequestObj.Status.SnapshotID, cnsVolumeOperationRequestName)
 			storagePolicyUsageInstanceName = cnsvolumeoperationrequestObj.Status.StorageQuotaDetails.
 				StorageClassName + "-" + storagepolicyv1alpha3.NameSuffixForSnapshot
 		} else {
-			log.Infof("cnsvolumeoperationrequestCRDeleted: Delete event receieved for PVC operation "+
+			log.Infof("cnsvolumeoperationrequestCRDeleted: Delete event received for PVC operation "+
 				"with volumeID %s CnsVolumeOperationRequest: %s",
 				cnsvolumeoperationrequestObj.Status.VolumeID, cnsVolumeOperationRequestName)
 			// Fetch StoragePolicyUsage instance for storageClass associated with the volume.
@@ -2342,14 +2342,14 @@ func cnsvolumeoperationrequestCRUpdated(oldObj interface{}, newObj interface{}) 
 		isSnapshot := checkOperationRequestCRForSnapshot(ctx, cnsVolumeOperationRequestName)
 		storagePolicyUsageInstanceName := ""
 		if isSnapshot {
-			log.Infof("Update event receieved for snapshot operation on volumeID %s CnsVolumeOperationRequest: %s",
+			log.Infof("Update event received for snapshot operation on volumeID %s CnsVolumeOperationRequest: %s",
 				newcnsvolumeoperationrequestObj.Status.VolumeID, cnsVolumeOperationRequestName)
 			// Fetch StoragePolicyUsage instance for storageClass associated with the snapshot.
 			storagePolicyUsageInstanceName = newcnsvolumeoperationrequestObj.Status.StorageQuotaDetails.
 				StorageClassName + "-" + storagepolicyv1alpha3.NameSuffixForSnapshot
 
 		} else {
-			log.Infof("Update event receieved for volume operation on volumeID %s CnsVolumeOperationRequest: %s",
+			log.Infof("Update event received for volume operation on volumeID %s CnsVolumeOperationRequest: %s",
 				newcnsvolumeoperationrequestObj.Status.VolumeID, cnsVolumeOperationRequestName)
 			// Fetch StoragePolicyUsage instance for storageClass associated with the volume.
 			storagePolicyUsageInstanceName = newcnsvolumeoperationrequestObj.Status.StorageQuotaDetails.StorageClassName + "-" +
@@ -3179,7 +3179,7 @@ func pvAdded(obj interface{}, metadataSyncer *metadataSyncInformer) {
 	err := metadataSyncer.coCommonInterface.UpdatePersistentVolumeLabel(ctx, pv.Name,
 		common.VolumeContextAttributeLinkedCloneVolumeSnapshotSourceUID, vsUID)
 	if err != nil {
-		log.Errorf("PVAdded: Error updating PV label with key: %s, value: %s error: %v",
+		log.Errorf("PVAdded: Error updating PV label with key: %s, value: %s. Error: %v",
 			common.VolumeContextAttributeLinkedCloneVolumeSnapshotSourceUID, vsUID, err)
 		return
 	}
@@ -4326,11 +4326,11 @@ func createStoragePolicyUsageCR(ctx context.Context, quotaClient client.Client, 
 	}
 	err := quotaClient.Create(ctx, &newUsageInstance, &client.CreateOptions{})
 	if err != nil {
-		log.Errorf("Failed to create StoragePolicyUsage for policyID %v storageclass %v resourceKind %v. Err: %+v",
+		log.Errorf("Failed to create StoragePolicyUsage for policyID %v StorageClass %v resourceKind %v. Err: %+v",
 			storagePolicyId, storageClassName, resourceKind, err)
 		return nil, err
 	}
-	log.Infof("Successfully created StoragePolicyUsage %q/%q for policyID %v storageclass %v resourceKind %v.",
+	log.Infof("Successfully created StoragePolicyUsage %q/%q for policyID %v StorageClass %v resourceKind %v.",
 		name, namespace, storagePolicyId, storageClassName, resourceKind)
 	return &newUsageInstance, nil
 }
@@ -5028,7 +5028,7 @@ func syncStoragePolicyUsageUsedValues(ctx context.Context, cnsOperatorClient cli
 				patchedStoragePolicyUsage.Status.ResourceTypeLevelQuotaUsage.Used = totalUsedQty
 				currentUsedCapacity := storagePolicyUsage.Status.ResourceTypeLevelQuotaUsage.Used
 				if currentUsedCapacity.Value() != totalUsedQty.Value() {
-					log.Infof("storagePolicyUsageCRSync: The used capacity field for StoragepolicyUsage CR: %s in namespace: %s "+
+					log.Infof("storagePolicyUsageCRSync: The used capacity field for StoragePolicyUsage CR: %s in namespace: %s "+
 						"is not matching with the total capacity of all the k8s volumes in Bound state. Current: %s , "+
 						"Expected: %s", storagePolicyUsage.Name, storagePolicyUsage.Namespace,
 						currentUsedCapacity.String(), totalUsedQty.String())
@@ -5039,11 +5039,11 @@ func syncStoragePolicyUsageUsedValues(ctx context.Context, cnsOperatorClient cli
 							"namespace: %s. err: %v. Continuing..", storagePolicyUsage.Name, patchedStoragePolicyUsage.Namespace, err)
 						continue
 					}
-					log.Infof("storagePolicyUsageCRSync: Successfully updated the used field from %s to %s for StoragepolicyUsage "+
+					log.Infof("storagePolicyUsageCRSync: Successfully updated the used field from %s to %s for StoragePolicyUsage "+
 						"CR: %s in namespace: %s", currentUsedCapacity.String(),
 						totalUsedQty.String(), patchedStoragePolicyUsage.Name, patchedStoragePolicyUsage.Namespace)
 				} else {
-					log.Infof("storagePolicyUsageCRSync: The used capacity field for StoragepolicyUsage CR: %s in namespace: %s "+
+					log.Infof("storagePolicyUsageCRSync: The used capacity field for StoragePolicyUsage CR: %s in namespace: %s "+
 						"field is matching with the total capacity. Used: %s Skipping the Patch operation",
 						storagePolicyUsage.Name, storagePolicyUsage.Namespace,
 						storagePolicyUsage.Status.ResourceTypeLevelQuotaUsage.Used.String())

@@ -539,7 +539,7 @@ func (driver *vsphereCSIDriver) NodeExpandVolume(
 	} else if req.GetCapacityRange() == nil {
 		return nil, logger.LogNewErrorCode(log, codes.InvalidArgument, "capacity range must be provided")
 	} else if req.GetCapacityRange().GetRequiredBytes() < 0 || req.GetCapacityRange().GetLimitBytes() < 0 {
-		return nil, logger.LogNewErrorCode(log, codes.InvalidArgument, "capacity ranges values cannot be negative")
+		return nil, logger.LogNewErrorCode(log, codes.InvalidArgument, "capacity range values cannot be negative")
 	}
 
 	reqVolSizeBytes := int64(req.GetCapacityRange().GetRequiredBytes())

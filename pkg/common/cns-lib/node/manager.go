@@ -210,7 +210,7 @@ func (m *defaultManager) GetK8sNode(ctx context.Context, nodename string) (*v1.N
 	log := logger.GetLogger(ctx)
 	node, err := m.k8sClient.CoreV1().Nodes().Get(ctx, nodename, metav1.GetOptions{})
 	if err != nil {
-		log.Errorf("failed to obtain node for nodename:%q", nodename)
+		log.Errorf("failed to obtain node for nodename: %q", nodename)
 	}
 	return node, err
 }

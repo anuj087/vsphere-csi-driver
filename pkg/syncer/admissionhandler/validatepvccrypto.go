@@ -83,7 +83,7 @@ func validatePVCCrypto(
 		allErrs = append(allErrs, field.Invalid(
 			encClassNamePath,
 			encClassName,
-			"requires spec.storageClassName specify an encryption storage class"))
+			"requires spec.storageClassName to specify an encryption storage class"))
 	}
 
 	return allErrs

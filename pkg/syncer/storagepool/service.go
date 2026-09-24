@@ -108,7 +108,7 @@ func InitStoragePoolService(ctx context.Context,
 
 	scWatchCntlr, err := startStorageClassWatch(ctx, spController, cfg)
 	if err != nil {
-		log.Errorf("Failed starting the Storageclass watch. Err: %+v", err)
+		log.Errorf("Failed starting the StorageClass watch. Err: %+v", err)
 		return err
 	}
 

@@ -89,7 +89,7 @@ func watchConfigChange(enableWebhookClientCertVerification bool) {
 	log.Debugf("Webhook config: %v", cfg)
 	watcher, err := fsnotify.NewWatcher()
 	if err != nil {
-		log.Fatalf("failed to create fsnotify watcher. err=%v", err)
+		log.Fatalf("failed to create fsnotify watcher. err: %v", err)
 	}
 	go func() {
 		for {
@@ -204,7 +204,7 @@ func StartWebhookServer(ctx context.Context, enableWebhookClientCertVerification
 			pvcsiConfigPath := cnsconfig.GetConfigPath(ctx)
 			watcher, err := fsnotify.NewWatcher()
 			if err != nil {
-				log.Errorf("failed to create fsnotify watcher. err=%v", err)
+				log.Errorf("failed to create fsnotify watcher. err: %v", err)
 				return err
 			}
 			go func() {
@@ -233,13 +233,13 @@ func StartWebhookServer(ctx context.Context, enableWebhookClientCertVerification
 			log.Infof("Adding watch on path: %q", cfgDirPath)
 			err = watcher.Add(cfgDirPath)
 			if err != nil {
-				log.Errorf("failed to watch on path: %q. err=%v", cfgDirPath, err)
+				log.Errorf("failed to watch on path: %q. err: %v", cfgDirPath, err)
 				return err
 			}
 			log.Infof("Adding watch on path: %q", cnsconfig.DefaultpvCSIProviderPath)
 			err = watcher.Add(cnsconfig.DefaultpvCSIProviderPath)
 			if err != nil {
-				log.Errorf("failed to watch on path: %q. err=%v", cnsconfig.DefaultpvCSIProviderPath, err)
+				log.Errorf("failed to watch on path: %q. err: %v", cnsconfig.DefaultpvCSIProviderPath, err)
 				return err
 			}
 		}
@@ -260,7 +260,7 @@ func StartWebhookServer(ctx context.Context, enableWebhookClientCertVerification
 		if featureGateBlockVolumeSnapshotEnabled {
 			certs, err := tls.LoadX509KeyPair(cfg.WebHookConfig.CertFile, cfg.WebHookConfig.KeyFile)
 			if err != nil {
-				log.Errorf("failed to load key pair. certFile: %q, keyFile: %q err: %v",
+				log.Errorf("failed to load key pair. certFile: %q, keyFile: %q. err: %v",
 					cfg.WebHookConfig.CertFile, cfg.WebHookConfig.KeyFile, err)
 				return err
 			}
@@ -302,7 +302,7 @@ func StartWebhookServer(ctx context.Context, enableWebhookClientCertVerification
 			return nil
 		}
 	}
-	return logger.LogNewError(log, "can't start webhook. no features are enabled which requires webhook")
+	return logger.LogNewError(log, "can't start webhook. no features are enabled that require the webhook")
 }
 
 // restartWebhookServer stops the webhook server and start webhook using
@@ -317,7 +317,7 @@ func restartWebhookServer(ctx context.Context, enableWebhookClientCertVerificati
 	log.Info("Shutting down webhook server gracefully...")
 	err = server.Shutdown(context.Background())
 	if err != nil {
-		log.Errorf("failed to get shutdown webhook server. err: %v", err)
+		log.Errorf("failed to shut down webhook server. err: %v", err)
 		return err
 	}
 	log.Info("Restarting webhook server...")

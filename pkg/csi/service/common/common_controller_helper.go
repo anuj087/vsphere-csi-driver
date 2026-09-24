@@ -159,7 +159,7 @@ func CheckAPI(ctx context.Context,
 			}
 		}
 	}
-	log.Infof("VC version detected as %q satisfies minimum supported vcenter version %d.%d.%d.",
+	log.Infof("VC version detected as %q satisfies minimum supported vCenter version %d.%d.%d.",
 		versionToCheck, minSupportedVCenterMajor, minSupportedVCenterMinor, minSupportedVCenterPatch)
 	return nil
 }
@@ -216,7 +216,7 @@ func UseVslmAPIs(ctx context.Context, aboutInfo vim25types.AboutInfo) (bool, err
 				return true, nil
 			}
 			return false, logger.LogNewErrorf(log,
-				"Found vCenter version :%q. The minimum version for CSI migration is vCenter Server 6.7 Update 3l",
+				"Found vCenter version: %q. The minimum version for CSI migration is vCenter Server 6.7 Update 3l",
 				aboutInfo.ApiVersion)
 		}
 		if err != nil {
@@ -240,7 +240,7 @@ func ValidateControllerExpandVolumeRequest(ctx context.Context, req *csi.Control
 	} else if req.GetCapacityRange() == nil {
 		return logger.LogNewErrorCode(log, codes.InvalidArgument, "capacity range is a required parameter")
 	} else if req.GetCapacityRange().GetRequiredBytes() < 0 || req.GetCapacityRange().GetLimitBytes() < 0 {
-		return logger.LogNewErrorCode(log, codes.InvalidArgument, "capacity ranges values cannot be negative")
+		return logger.LogNewErrorCode(log, codes.InvalidArgument, "capacity range values cannot be negative")
 	}
 	// Validate Volume Capabilities.
 	volCaps := req.GetVolumeCapability()

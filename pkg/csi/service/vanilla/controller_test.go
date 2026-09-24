@@ -673,7 +673,7 @@ func TestCreateVolumeWithInvalidAccessibilityRequirements(t *testing.T) {
 			t.Fatalf("unable to convert the error: %+v into a grpc status error type", err)
 		}
 		if createErr.Code() == codes.InvalidArgument && strings.Contains(createErr.Message(),
-			"topology category names not specified in the vsphere config secret") {
+			"topology category names not specified in the vSphere config secret") {
 			t.Logf("Received expected error since topology category names are not specified in the vSphere config " +
 				"but AccessiblityRequirements were provided in the CreateVolume request")
 		} else {

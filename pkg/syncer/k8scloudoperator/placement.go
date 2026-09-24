@@ -688,7 +688,7 @@ func PlacePVConStoragePool(ctx context.Context, client kubernetes.Interface,
 	pvcPlacementMutex.Lock()
 	defer pvcPlacementMutex.Unlock()
 
-	// Filter candidate hosts further to elimate nodes that may have bound PVCs
+	// Filter candidate hosts further to eliminate nodes that may have bound PVCs
 	// of sibling replicas.
 	hostNames, err = eliminateNodesWithPvcOfSiblingReplica(ctx, client, curPVC, hostNames)
 	if err != nil {

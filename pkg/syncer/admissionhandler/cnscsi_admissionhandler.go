@@ -354,14 +354,14 @@ func getPVCUID(ctx context.Context, pvcName, namespace string) (string, error) {
 
 	k8sClient, err := k8s.NewClient(ctx)
 	if err != nil {
-		log.Errorf("failed to create k8s client. Errror: %s", err)
+		log.Errorf("failed to create k8s client. Error: %s", err)
 		return "", err
 	}
 
 	pvc, err := k8sClient.CoreV1().PersistentVolumeClaims(namespace).Get(ctx, pvcName,
 		v1.GetOptions{})
 	if err != nil {
-		log.Errorf("failed to obtain PVC %s. Errror: %s", pvcName, err)
+		log.Errorf("failed to obtain PVC %s. Error: %s", pvcName, err)
 		return "", err
 	}
 
@@ -486,7 +486,7 @@ func (h *CSISupervisorMutationWebhook) mutateNewPVC(ctx context.Context, req adm
 	// (no API calls), so it is safe/cheap to do for every PVC, not just linked clones.
 	dataSource, err := k8sorchestrator.GetPVCDataSource(ctx, newPVC)
 	if err != nil {
-		return admission.Denied("failed to retrieve the PVC data source. err:" + err.Error())
+		return admission.Denied("failed to retrieve the PVC data source. err: " + err.Error())
 	}
 
 	if isLinkedCloneReq {
@@ -512,7 +512,7 @@ func (h *CSISupervisorMutationWebhook) mutateNewPVC(ctx context.Context, req adm
 			volumeSnapshotName)
 		if err != nil {
 			if isLinkedCloneReq {
-				return admission.Denied("failed to retrieve the linked clone source PVC. err:" + err.Error())
+				return admission.Denied("failed to retrieve the linked clone source PVC. err: " + err.Error())
 			}
 			// Best-effort for a plain restore: if the source PVC can't be resolved, skip
 			// propagating the topology hint rather than blocking the request.
@@ -541,12 +541,12 @@ func (h *CSISupervisorMutationWebhook) mutateNewPVC(ctx context.Context, req adm
 				requestedZones, err := pvcTopologyZones(newPVCAccessibility)
 				if err != nil {
 					return admission.Denied("failed to parse " + common.AnnGuestClusterRequestedTopology +
-						". err:" + err.Error())
+						". err: " + err.Error())
 				}
 				accessibleZones, err := pvcTopologyZones(sourcePVCAccessibility)
 				if err != nil {
 					return admission.Denied("failed to parse " + common.AnnVolumeAccessibleTopology +
-						". err:" + err.Error())
+						". err: " + err.Error())
 				}
 				if len(requestedZones) == 0 || len(accessibleZones) == 0 {
 					// Topology annotations may legitimately carry only non-zone segments, e.g. a

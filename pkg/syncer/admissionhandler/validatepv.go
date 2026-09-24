@@ -14,7 +14,7 @@ import (
 
 const (
 	// FileVolumeWithNodeAffinityError conveys the message that a file volume cannot have node affinity rules on it.
-	FileVolumeWithNodeAffinityError = "Invalid configuration. File volumes cannot have node affinity rules"
+	FileVolumeWithNodeAffinityError = "Invalid configuration. File volumes cannot have node affinity rules."
 )
 
 func validatePv(ctx context.Context, req *admissionv1.AdmissionRequest) *admissionv1.AdmissionResponse {

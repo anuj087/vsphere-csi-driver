@@ -134,7 +134,7 @@ var (
 
 	// ErrMissingVCenter is returned when the provided configuration does not
 	// define any vCenters.
-	ErrMissingVCenter = errors.New("no Virtual Center hosts defined")
+	ErrMissingVCenter = errors.New("no vCenter hosts defined")
 
 	// ErrClusterIDCharLimit is returned when the provided cluster id is more
 	// than 64 characters.
@@ -158,7 +158,7 @@ var (
 
 	// ErrMissingTopologyCategoriesForMultiVCenterSetup is returned when the TopologyCategories are not specified for
 	// Multi vCenter deployment
-	ErrMissingTopologyCategoriesForMultiVCenterSetup = errors.New("vsphere CSI config requires " +
+	ErrMissingTopologyCategoriesForMultiVCenterSetup = errors.New("vSphere CSI config requires " +
 		"topology-categories to be specified for multi vCenter deployment")
 
 	// ErrMaxVCenterSupportedForMultiVCenterSetup is returned when vSphere config secret has more than 5 vCenter
@@ -501,7 +501,7 @@ func validateConfig(ctx context.Context, cfg *Config) error {
 	for key, categoryInfo := range cfg.TopologyCategory {
 		topoDomain := strings.Split(categoryInfo.Label, "/")[0]
 		if topoDomain != betaDomain && topoDomain != gaDomain && topoDomain != TopologyLabelsDomain {
-			return logger.LogNewErrorf(log, "unrecognised topology label %q used for topology category %q",
+			return logger.LogNewErrorf(log, "unrecognized topology label %q used for topology category %q",
 				categoryInfo.Label, key)
 		}
 	}

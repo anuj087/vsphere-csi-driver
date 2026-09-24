@@ -1617,7 +1617,7 @@ func (volTopology *wcpControllerVolumeTopology) GetTopologyInfoFromNodes(ctx con
 		topologySegments = selectedSegments
 	default:
 		// This is considered a configuration error.
-		return nil, &common.InvalidTopologyProvisioningError{ErrMsg: fmt.Sprintf("unrecognised "+
+		return nil, &common.InvalidTopologyProvisioningError{ErrMsg: fmt.Sprintf("unrecognized "+
 			"storageTopologyType found: %q", params.StorageTopologyType)}
 	}
 	log.Infof("Topology of the provisioned volume detected as %+v", topologySegments)
@@ -1758,18 +1758,18 @@ func (c *K8sOrchestrator) GetActiveClustersForNamespaceInRequestedZones(ctx cont
 		zoneObjUnstructured := zoneObj.(*unstructured.Unstructured)
 		// Only get active clusters from zones without a deletion timestamp.
 		if zoneObjUnstructured.GetDeletionTimestamp() != nil {
-			log.Debugf("skipping zone:%q as it is being deleted", zoneObjUnstructured.GetName())
+			log.Debugf("skipping zone: %q as it is being deleted", zoneObjUnstructured.GetName())
 			continue
 		}
 		// check if zone belong to namespace specified with targetNS and belong to
 		// volume requirement specified with requestedZones
 		if zoneObjUnstructured.GetNamespace() != targetNS {
-			log.Debugf("skipping zone:%q as it is not assgiend to namespace: %q",
+			log.Debugf("skipping zone: %q as it is not assigned to namespace: %q",
 				zoneObjUnstructured.GetName(), targetNS)
 			continue
 		}
 		if !slices.Contains(requestedZones, zoneObjUnstructured.GetName()) {
-			log.Debugf("skipping zone:%q as it does not belong to requestedZones: %v",
+			log.Debugf("skipping zone: %q as it does not belong to requestedZones: %v",
 				zoneObjUnstructured.GetName(), requestedZones)
 			continue
 		}
@@ -1777,11 +1777,11 @@ func (c *K8sOrchestrator) GetActiveClustersForNamespaceInRequestedZones(ctx cont
 		clusters, found, err := unstructured.NestedStringSlice(zoneObjUnstructured.Object,
 			"spec", "namespace", "clusterMoIDs")
 		if err != nil {
-			return nil, logger.LogNewErrorf(log, "failed to get clusterMoIDs from zone instance :%q. err :%v",
+			return nil, logger.LogNewErrorf(log, "failed to get clusterMoIDs from zone instance: %q. err: %v",
 				zoneObj.(*unstructured.Unstructured).GetName(), err)
 		}
 		if !found {
-			return nil, logger.LogNewErrorf(log, "clusterMoIDs not found in zone instance :%q",
+			return nil, logger.LogNewErrorf(log, "clusterMoIDs not found in zone instance: %q",
 				zoneObj.(*unstructured.Unstructured).GetName())
 		}
 		log.Infof("zone name=%q ns=%q uid=%q rv=%q active clusters: %v",

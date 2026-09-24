@@ -481,12 +481,12 @@ func isStoragePolicyAssignedToNamespace(ctx context.Context, k8sClient clientset
 	}); err != nil {
 		return false, logger.LogNewErrorf(log, "Failed to list StoragePolicyQuota CR on the namespace: %s", namespace)
 	}
-	log.Debugf("Fetch storagePolicyQuotaList: %+v  in namespace %s", storagePolicyQuotaList, namespace)
+	log.Debugf("Fetch storagePolicyQuotaList: %+v in namespace %s", storagePolicyQuotaList, namespace)
 	for _, storagePolicyQuota := range storagePolicyQuotaList.Items {
 		if storagePolicyQuota.Spec.StoragePolicyId != storagePolicyID {
 			continue
 		}
-		log.Debugf("Found storagePlicyQuota CR with matching storagePolicyId:%s in namespaces:%s",
+		log.Debugf("Found storagePolicyQuota CR with matching storagePolicyId: %s in namespaces: %s",
 			storagePolicyID, namespace)
 		// NOTE: Below code expects StoragePolicyQuota CR status will be populated with all fields with zero values from the
 		// start (to be taken care by quota controller), otherwise this code will always return error.
@@ -605,7 +605,7 @@ func resolveStorageClassNameForRegistration(ctx context.Context, k8sClient clien
 				candidate, namespace, err)
 		}
 		if !assigned {
-			return "", fmt.Errorf("PVC %s's storage class %q is not assigned to namespace %q",
+			return "", fmt.Errorf("PVC %s's StorageClass %q is not assigned to namespace %q",
 				pvc.Name, candidate, namespace)
 		}
 		return candidate, nil
@@ -761,7 +761,7 @@ func isPVCBound(ctx context.Context, client clientset.Interface, claim *v1.Persi
 			Watch:          true,
 		})
 	if err != nil {
-		errMsg := fmt.Errorf("failed to watch PersistentVolumeClaim %s with Error: %v", pvcName, err)
+		errMsg := fmt.Errorf("failed to watch PersistentVolumeClaim %s. Error: %v", pvcName, err)
 		log.Error(errMsg)
 		return false, errMsg
 	}

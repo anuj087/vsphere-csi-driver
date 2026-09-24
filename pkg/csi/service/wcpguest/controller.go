@@ -1155,7 +1155,7 @@ func controllerPublishForBlockVolume(ctx context.Context, req *csi.ControllerPub
 			TimeoutSeconds: &timeoutSeconds,
 		})
 		if err != nil {
-			msg := fmt.Sprintf("failed to watch virtualMachine %q with Error: %v", virtualMachine.Name, err)
+			msg := fmt.Sprintf("failed to watch virtualMachine %q. Error: %v", virtualMachine.Name, err)
 			log.Error(msg)
 			return nil, csifault.CSIInternalFault, status.Error(codes.Internal, msg)
 		}
@@ -1346,7 +1346,7 @@ func controllerPublishForFileVolume(ctx context.Context, req *csi.ControllerPubl
 		TimeoutSeconds:  &timeoutSeconds,
 	})
 	if err != nil {
-		msg := fmt.Sprintf("failed to watch cnsfileaccessconfig %q with Error: %v", cnsFileAccessConfigInstance.Name, err)
+		msg := fmt.Sprintf("failed to watch cnsfileaccessconfig %q. Error: %v", cnsFileAccessConfigInstance.Name, err)
 		log.Error(msg)
 		return nil, csifault.CSIInternalFault, status.Error(codes.Internal, msg)
 	}
@@ -1541,7 +1541,7 @@ func controllerUnpublishForBlockVolume(ctx context.Context, req *csi.ControllerU
 		}
 	}
 	if !isVolumePresentInVMStatus {
-		log.Infof("ControllerUnpublishVolume: Volume %q not found in VM %q status field. Assuming it's already detached",
+		log.Infof("ControllerUnpublishVolume: Volume %q not found in VM %q status field. Assuming it is already detached",
 			req.VolumeId, req.NodeId)
 	} else {
 		// Watch virtual machine object and wait for volume name to be removed from the status field.
@@ -1550,7 +1550,7 @@ func controllerUnpublishForBlockVolume(ctx context.Context, req *csi.ControllerU
 			TimeoutSeconds: &timeoutSeconds,
 		})
 		if err != nil {
-			msg := fmt.Sprintf("failed to watch VirtualMachine %q with Error: %v", virtualMachine.Name, err)
+			msg := fmt.Sprintf("failed to watch VirtualMachine %q. Error: %v", virtualMachine.Name, err)
 			log.Error(msg)
 			return nil, csifault.CSIInternalFault, status.Error(codes.Internal, msg)
 		}
@@ -1591,7 +1591,7 @@ func controllerUnpublishForBlockVolume(ctx context.Context, req *csi.ControllerU
 						log.Debugf("Volume %q still exists in VirtualMachine %q status", volume.Name, virtualMachine.Name)
 						isVolumeDetached = false
 						if volume.Attached && volume.Error != "" {
-							msg := fmt.Sprintf("failed to detach volume %q from VirtualMachine %q with Error: %v",
+							msg := fmt.Sprintf("failed to detach volume %q from VirtualMachine %q. Error: %v",
 								volume.Name, virtualMachine.Name, volume.Error)
 							log.Error(msg)
 							return nil, csifault.CSIInternalFault, status.Error(codes.Internal, msg)
@@ -1667,7 +1667,7 @@ func controllerUnpublishForFileVolume(ctx context.Context, req *csi.ControllerUn
 		TimeoutSeconds:  &timeoutSeconds,
 	})
 	if err != nil {
-		msg := fmt.Sprintf("failed to watch cnsFileAccessConfig instance %q/%q with Error: %v",
+		msg := fmt.Sprintf("failed to watch cnsFileAccessConfig instance %q/%q. Error: %v",
 			c.supervisorNamespace, cnsFileAccessConfigInstanceName, err)
 		log.Error(msg)
 		return nil, csifault.CSIInternalFault, status.Error(codes.Internal, msg)
@@ -2035,7 +2035,7 @@ func (c *controller) CreateSnapshot(ctx context.Context, req *csi.CreateSnapshot
 		supervisorVolumeSnapshotName := c.tanzukubernetesClusterUID + "-" + req.Name[9:]
 		log.Infof("Determined VolumeSnapshotClass: %s for the supervisor VolumeSnapshot: %s",
 			supervisorVolumeSnapshotClass, supervisorVolumeSnapshotName)
-		log.Infof("Looking for VolumeSnapshot %s in supervisor namespace: %s ..",
+		log.Infof("Looking for VolumeSnapshot %s in supervisor namespace: %s...",
 			supervisorVolumeSnapshotName, c.supervisorNamespace)
 		volumeSnapshotName := req.Parameters[common.VolumeSnapshotNameKey]
 		volumeSnapshotNamespace := req.Parameters[common.VolumeSnapshotNamespaceKey]

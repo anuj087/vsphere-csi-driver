@@ -436,7 +436,7 @@ func (volumeMigration *volumeMigration) DeleteVolumeInfo(ctx context.Context, vo
 			log.Infof("volumeMigrationCR is already deleted for volumeID: %q", volumeID)
 			return nil
 		}
-		log.Errorf("failed delete volumeMigration CR for volumeID: %q", volumeID)
+		log.Errorf("failed to delete volumeMigration CR for volumeID: %q", volumeID)
 		return err
 	}
 	return nil
@@ -551,10 +551,10 @@ func (volumeMigration *volumeMigration) registerVolume(ctx context.Context,
 					"registration failed for volumePath: %v", volumeSpec.VolumePath)
 			}
 			createSpec.BackingObjectDetails = &cnstypes.CnsBlockBackingDetails{BackingDiskId: backingObjectID}
-			log.Infof("Registering volume: %q using backingDiskId :%q", volumeSpec.VolumePath, backingObjectID)
+			log.Infof("Registering volume: %q using backingDiskId: %q", volumeSpec.VolumePath, backingObjectID)
 		} else {
 			createSpec.BackingObjectDetails = &cnstypes.CnsBlockBackingDetails{BackingDiskUrlPath: backingDiskURLPath}
-			log.Infof("Registering volume: %q using backingDiskURLPath :%q", volumeSpec.VolumePath, backingDiskURLPath)
+			log.Infof("Registering volume: %q using backingDiskURLPath: %q", volumeSpec.VolumePath, backingDiskURLPath)
 		}
 		log.Debugf("vSphere CSI driver registering volume %q with create spec %+v",
 			volumeSpec.VolumePath, spew.Sdump(createSpec))
@@ -575,7 +575,7 @@ func (volumeMigration *volumeMigration) registerVolume(ctx context.Context,
 	}
 	isvSphere80U3orAbove, err := vsphere.IsvSphereVersion80U3orAbove(ctx, vCenter.Client.ServiceContent.About)
 	if err != nil {
-		return "", false, logger.LogNewErrorf(log, "Error while checking the vSphere Version %v , Err= %+v",
+		return "", false, logger.LogNewErrorf(log, "Error while checking the vSphere Version %v, Err= %+v",
 			vCenter.Client.ServiceContent.About, err)
 	}
 	// for vSphere 8.0u3 and above migrated volume is already protected from VM deletion
@@ -598,7 +598,7 @@ func (volumeMigration *volumeMigration) cleanupStaleCRDInstances() {
 		}
 		crdGroupClient, err := k8s.NewClientForGroup(ctx, config, CRDGroupName)
 		if err != nil {
-			log.Warnf("failed to create new client for group %q . Err: %+v", CRDGroupName, err)
+			log.Warnf("failed to create new client for group %q. Err: %+v", CRDGroupName, err)
 			continue
 		}
 
@@ -620,12 +620,12 @@ func (volumeMigration *volumeMigration) cleanupStaleCRDInstances() {
 			log.Debugf("No volumes found in Query Volume Result")
 			continue
 		}
-		log.Debugf("QueryVolumeInfo successfully returned with result:  %v:", spew.Sdump(queryAllResult))
+		log.Debugf("QueryVolumeInfo successfully returned with result: %v:", spew.Sdump(queryAllResult))
 		cnsVolumesMap := make(map[string]bool)
 		for _, vol := range queryAllResult.Volumes {
 			cnsVolumesMap[vol.VolumeId.Id] = true
 		}
-		log.Debugf("cnsVolumesMap:  %v:", cnsVolumesMap)
+		log.Debugf("cnsVolumesMap: %v:", cnsVolumesMap)
 		k8sclient, err := k8s.NewClient(ctx)
 		if err != nil {
 			log.Errorf("failed to get k8sclient with error: %v", err)

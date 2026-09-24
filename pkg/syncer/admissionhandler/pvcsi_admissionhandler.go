@@ -146,7 +146,7 @@ func (h *CSIGuestWebhook) Handle(ctx context.Context, req admission.Request) (re
 func (g *CSIGuestMutationWebhook) Handle(ctx context.Context, req admission.Request) (resp admission.Response) {
 	log := logger.GetLogger(ctx)
 	log.Debugf("PV-CSI mutation webhook handler called with request: %s/%s", req.Name, req.Namespace)
-	defer log.Debugf("PV-CSI mutation webhook handler completed for the request:%s/%s",
+	defer log.Debugf("PV-CSI mutation webhook handler completed for the request: %s/%s",
 		req.Name, req.Namespace)
 	resp = admission.Allowed("")
 	if req.Kind.Kind == "PersistentVolumeClaim" {

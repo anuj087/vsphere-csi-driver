@@ -192,7 +192,7 @@ func findCommonHostsforAllTopologyKeys(ctx context.Context,
 	for _, host := range hostLists[0] {
 		hostCount[host.String()]++
 	}
-	log.Debugf("hostCount after setting count in the first slice : %v", hostCount)
+	log.Debugf("hostCount after setting count in the first slice: %v", hostCount)
 	// Iterate through the remaining slices and update the hostCount map
 	for i := 1; i < len(hostLists); i++ {
 		for _, host := range hostLists[i] {
@@ -202,7 +202,7 @@ func findCommonHostsforAllTopologyKeys(ctx context.Context,
 			}
 		}
 	}
-	log.Debugf("hostCount after iterate through the remaining slices and updated hostCount map : %v", hostCount)
+	log.Debugf("hostCount after iterating through the remaining slices and updating hostCount map: %v", hostCount)
 	// Create a slice to store the intersection
 	var commonHosts []string
 
@@ -310,7 +310,7 @@ func fetchHosts(ctx context.Context, entity mo.Reference, vCenter *cnsvsphere.Vi
 		host := cnsvsphere.HostSystem{HostSystem: object.NewHostSystem(vCenter.Client.Client, entity.Reference())}
 		hosts = append(hosts, &host)
 	default:
-		return nil, logger.LogNewErrorf(log, "unrecognised entity type found %+v.", entity.Reference())
+		return nil, logger.LogNewErrorf(log, "unrecognized entity type found %+v.", entity.Reference())
 	}
 	activeHosts, err := filterMaintenanceModeHosts(ctx, hosts, vCenter, entity.Reference())
 	if err != nil {
@@ -384,7 +384,7 @@ func GetAccessibilityRequirementsByVC(ctx context.Context, topoReq *csi.Topology
 		segments := topology.GetSegments()
 		vcHost, err := getVCForTopologySegments(ctx, segments)
 		if err != nil {
-			return nil, logger.LogNewErrorf(log, "failed to fetch vCenter associated with topology segments: %+v , err: %v",
+			return nil, logger.LogNewErrorf(log, "failed to fetch vCenter associated with topology segments: %+v, err: %v",
 				segments, err)
 		}
 		vcTopoSegmentsMap[vcHost] = append(vcTopoSegmentsMap[vcHost], segments)
@@ -534,7 +534,7 @@ func RefreshPreferentialDatastoresForMultiVCenter(ctx context.Context) error {
 		defer preferredDatastoresMapInstanceLock.Unlock()
 		preferredDatastoresMap = prefDatastoresMap
 		PreferredDatastoresExist = true
-		log.Debugf("preferredDatastoresMap :%v", preferredDatastoresMap)
+		log.Debugf("preferredDatastoresMap: %v", preferredDatastoresMap)
 		log.Debugf("PreferredDatastoresExist: %t", PreferredDatastoresExist)
 	}
 	return nil

@@ -25,7 +25,7 @@ func GetSharedDatastores(ctx context.Context, reqParams interface{}) (
 	params := reqParams.(VanillaSharedDatastoresParams)
 	nodeMgr := node.GetManager(ctx)
 
-	log.Infof("GetSharedDatastores called for VC %q with policyID: %q , Topology Segment List: %v",
+	log.Infof("GetSharedDatastores called for VC %q with policyID: %q, Topology Segment List: %v",
 		params.Vcenter.Config.Host, params.StoragePolicyID, params.TopologySegmentsList)
 	var sharedDatastores []*cnsvsphere.DatastoreInfo
 	// Iterate through each set of topology segments and find shared datastores for that segment.
@@ -98,7 +98,7 @@ func GetSharedDatastores(ctx context.Context, reqParams interface{}) (
 				compat, err := params.Vcenter.PbmCheckCompatibility(ctx, sharedDSMoRef, params.StoragePolicyID)
 				if err != nil {
 					return nil, logger.LogNewErrorf(log, "failed to find datastore compatibility "+
-						"with storage policy ID %q. vCenter: %q  Error: %+v", params.StoragePolicyID,
+						"with storage policy ID %q. vCenter: %q. Error: %+v", params.StoragePolicyID,
 						params.Vcenter.Config.Host, err)
 				}
 				compatibleDsMoids := make(map[string]struct{})

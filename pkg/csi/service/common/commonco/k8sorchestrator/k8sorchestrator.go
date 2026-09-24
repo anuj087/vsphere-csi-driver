@@ -1400,7 +1400,7 @@ func checkCapabilitiesCR(ctx context.Context, clusterFlavor cnstypes.CnsClusterF
 			Name: common.WCPCapabilitiesCRName},
 			wcpCapabilities)
 		if err != nil {
-			log.Errorf("failed to fetch Capabilities CR instance with name %q Error: %+v",
+			log.Errorf("failed to fetch Capabilities CR instance with name %q. Error: %+v",
 				common.WCPCapabilitiesCRName, err)
 			return err
 		}
@@ -1420,8 +1420,8 @@ func SetWcpCapabilitiesMap(ctx context.Context, wcpCapabilityApiClient client.Cl
 		Name: common.WCPCapabilitiesCRName},
 		wcpCapabilities)
 	if err != nil {
-		log.Errorf("failed to fetch Capabilities CR instance "+
-			" with name %q Error: %+v", common.WCPCapabilitiesCRName, err)
+		log.Errorf("failed to fetch Capabilities CR instance with name %q. Error: %+v",
+			common.WCPCapabilitiesCRName, err)
 		return err
 	}
 
@@ -1800,7 +1800,7 @@ func (c *K8sOrchestrator) MarkFakeAttached(ctx context.Context, volumeID string)
 	// health on pvc as inaccessible, as that's one of the conditions for volume
 	// to be fake attached.
 	if err := c.updatePVCAnnotations(ctx, volumeID, annotations); err != nil {
-		log.Errorf("failed to mark fake attach annotation on the pvc for volume %s. Error:%+v", volumeID, err)
+		log.Errorf("failed to mark fake attach annotation on the pvc for volume %s. Error: %+v", volumeID, err)
 		return err
 	}
 
@@ -1833,7 +1833,7 @@ func (c *K8sOrchestrator) ClearFakeAttached(ctx context.Context, volumeID string
 				// PVC not found, which means PVC could have been deleted.
 				return nil
 			}
-			log.Errorf("failed to clear fake attach annotation on the pvc for volume %s. Error:%+v", volumeID, err)
+			log.Errorf("failed to clear fake attach annotation on the pvc for volume %s. Error: %+v", volumeID, err)
 			return err
 		}
 	}
@@ -1904,7 +1904,7 @@ func volumeAttachmentAdded(obj interface{}) {
 		}
 		if !found {
 			nodes = append(nodes, nodeName)
-			log.Debugf("volumeAttachmentAdded: Adding nodeName %s to volumeID %s:%v map", nodeName, volumeName, nodes)
+			log.Debugf("volumeAttachmentAdded: Adding nodeName %s to volumeID %s: %v map", nodeName, volumeName, nodes)
 			k8sOrchestratorInstance.volumeNameToNodesMap.add(volumeName, nodes)
 		}
 	}
@@ -1947,7 +1947,7 @@ func volumeAttachmentUpdated(oldObj, newObj interface{}) {
 		}
 		if !found {
 			nodes = append(nodes, nodeName)
-			log.Debugf("volumeAttachmentUpdated: Adding nodeName %s to volumeID %s:%v map",
+			log.Debugf("volumeAttachmentUpdated: Adding nodeName %s to volumeID %s: %v map",
 				nodeName, volumeName, nodes)
 			k8sOrchestratorInstance.volumeNameToNodesMap.add(volumeName, nodes)
 		}
@@ -2155,7 +2155,7 @@ func (c *K8sOrchestrator) GetVolumeAttachment(ctx context.Context, volumeId stri
 	sha256VaName := fmt.Sprintf("csi-%x", sha256Res)
 	volumeAttachment, err := c.k8sClient.StorageV1().VolumeAttachments().Get(ctx, sha256VaName, metav1.GetOptions{})
 	if err != nil {
-		log.Errorf("failed to get the volumeattachment %q from API server Err: %v", sha256VaName, err)
+		log.Errorf("failed to get the volumeattachment %q from API server. Err: %v", sha256VaName, err)
 		return nil, err
 	}
 	return volumeAttachment, nil
@@ -2243,7 +2243,7 @@ func (c *K8sOrchestrator) GetVolumeIDFromPVCName(namespace string, pvcName strin
 func (c *K8sOrchestrator) IsLinkedCloneRequest(ctx context.Context, pvcName string, pvcNamespace string) (bool, error) {
 	log := logger.GetLogger(ctx)
 	if pvcName == "" || pvcNamespace == "" {
-		errMsg := "cannot determine if it's a LinkedClone request. PVC name and/or namespace are missing"
+		errMsg := "cannot determine if it is a LinkedClone request. PVC name and/or namespace are missing"
 		return false, logger.LogNewErrorf(log, "%s", errMsg)
 	}
 	pvcObj, err := c.k8sClient.CoreV1().PersistentVolumeClaims(pvcNamespace).Get(ctx, pvcName, metav1.GetOptions{})
@@ -2411,7 +2411,7 @@ func (c *K8sOrchestrator) UpdatePersistentVolumeLabel(ctx context.Context,
 			log.Error(errMsg)
 			return err
 		}
-		log.Infof("Successfully updated PV %s with label key:%s value:%s", pvName, key, value)
+		log.Infof("Successfully updated PV %s with label key: %s, value: %s", pvName, key, value)
 		return nil
 	})
 }

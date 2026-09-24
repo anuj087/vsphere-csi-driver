@@ -517,7 +517,7 @@ func (osUtils *OsUtils) CleanupPublishPath(ctx context.Context, target string, v
 			log.Debugf("failed to delete the target path %q", target)
 			return err
 		}
-		log.Debugf("Target path  %q successfully deleted", target)
+		log.Debugf("Target path %q successfully deleted", target)
 	}
 	return nil
 }
@@ -592,7 +592,7 @@ func (osUtils *OsUtils) GetBlockSizeBytes(ctx context.Context, devicePath string
 	strOut := strings.TrimSpace(string(output))
 	gotSizeBytes, err := strconv.ParseInt(strOut, 10, 64)
 	if err != nil {
-		return -1, fmt.Errorf("failed to parse size %s into int a size", strOut)
+		return -1, fmt.Errorf("failed to parse size %s into an integer size", strOut)
 	}
 	return gotSizeBytes, nil
 }
@@ -979,7 +979,7 @@ func (osUtils *OsUtils) VerifyTargetDir(ctx context.Context, target string, targ
 // Return pair is a bool flag of whether dir was created, and an error.
 func (osUtils *OsUtils) Mkdir(ctx context.Context, path string) (bool, error) {
 	log := logger.GetLogger(ctx)
-	log.Infof("creating directory :%q", path)
+	log.Infof("creating directory: %q", path)
 	st, err := os.Stat(path)
 	if err != nil {
 		if os.IsNotExist(err) {
@@ -1002,7 +1002,7 @@ func (osUtils *OsUtils) Mkdir(ctx context.Context, path string) (bool, error) {
 // Return pair is a bool flag of whether file was created, and an error.
 func (osUtils *OsUtils) Mkfile(ctx context.Context, path string) (bool, error) {
 	log := logger.GetLogger(ctx)
-	log.Infof("creating file :%q", path)
+	log.Infof("creating file: %q", path)
 	st, err := os.Stat(path)
 	if os.IsNotExist(err) {
 		file, err := os.OpenFile(path, os.O_CREATE, 0755)

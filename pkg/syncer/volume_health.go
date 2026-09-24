@@ -232,7 +232,7 @@ func updateVolumeHealthStatus(ctx context.Context, k8sclient clientset.Interface
 		_, err := k8sclient.CoreV1().PersistentVolumeClaims(pvc.Namespace).Update(ctx, pvc, metav1.UpdateOptions{})
 		if err != nil {
 			if apierrors.IsConflict(err) {
-				log.Debugf("updateVolumeHealthStatus: Failed to update pvc %s/%s with err:%+v, will retry the update",
+				log.Debugf("updateVolumeHealthStatus: Failed to update pvc %s/%s with err: %+v, will retry the update",
 					pvc.Namespace, pvc.Name, err)
 				// pvc get from pvcLister may be stale, try to get updated pvc which
 				// bound to pv from API server.
@@ -248,7 +248,7 @@ func updateVolumeHealthStatus(ctx context.Context, k8sclient clientset.Interface
 					_, err := k8sclient.CoreV1().PersistentVolumeClaims(newPvc.Namespace).Update(ctx,
 						newPvc, metav1.UpdateOptions{})
 					if err != nil {
-						log.Errorf("updateVolumeHealthStatus: Failed to update pvc %s/%s with err:%+v",
+						log.Errorf("updateVolumeHealthStatus: Failed to update pvc %s/%s with err: %+v",
 							newPvc.Namespace, newPvc.Name, err)
 					}
 				} else {
@@ -257,7 +257,7 @@ func updateVolumeHealthStatus(ctx context.Context, k8sclient clientset.Interface
 						pvc.Namespace, pvc.Name, err)
 				}
 			} else {
-				log.Errorf("updateVolumeHealthStatus: Failed to update pvc %s/%s with err:%+v",
+				log.Errorf("updateVolumeHealthStatus: Failed to update pvc %s/%s with err: %+v",
 					pvc.Namespace, pvc.Name, err)
 			}
 		}

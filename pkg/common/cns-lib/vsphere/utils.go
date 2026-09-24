@@ -217,7 +217,7 @@ func GetVirtualCenterConfig(ctx context.Context, cfg *config.Config) (*VirtualCe
 func GetVirtualCenterConfigs(ctx context.Context, cfg *config.Config) ([]*VirtualCenterConfig, error) {
 	log := logger.GetLogger(ctx)
 	if len(cfg.VirtualCenter) == 0 {
-		return nil, errors.New("unable get vCenter Hosts from VSphereConfig")
+		return nil, errors.New("unable to get vCenter hosts from vSphere config")
 	}
 	VirtualCenterConfigs := make([]*VirtualCenterConfig, 0, len(cfg.VirtualCenter))
 	for host, vcConfigEntry := range cfg.VirtualCenter {
@@ -272,7 +272,7 @@ func getFirstVirtualCenter(cfg *config.Config) (commontypes.FQDN, *config.Virtua
 	for host, vcConfigEntry := range cfg.VirtualCenter {
 		return host, vcConfigEntry, nil
 	}
-	return commontypes.FQDN{}, nil, errors.New("unable get vCenter Hosts from VSphereConfig")
+	return commontypes.FQDN{}, nil, errors.New("unable to get vCenter hosts from vSphere config")
 }
 
 // GetLabelsMapFromKeyValue creates a  map object from given parameter.
@@ -395,7 +395,7 @@ func GetCandidateDatastoresInCluster(ctx context.Context, vc *VirtualCenter, clu
 		}
 	}
 	if len(sharedDatastores) == 0 && len(vsanDirectDatastores) == 0 {
-		return nil, nil, fmt.Errorf("no candidates datastores found in the Kubernetes cluster")
+		return nil, nil, fmt.Errorf("no candidate datastores found in the Kubernetes cluster")
 	}
 	log.Debugf("Found shared datastores: %+v and vSAN Direct datastores: %+v", sharedDatastores,
 		vsanDirectDatastores)
@@ -435,10 +435,10 @@ func isVsan67u3Release(ctx context.Context, m *defaultVirtualCenterManager, host
 	log.Debug("Checking if vCenter version is of vsan 67u3 release")
 	vc, err := m.GetVirtualCenter(ctx, host)
 	if err != nil || vc == nil {
-		log.Errorf("failed to get vcenter version. Err: %v", err)
+		log.Errorf("failed to get vCenter version. Err: %v", err)
 		return false, err
 	}
-	log.Debugf("vCenter version is :%q", vc.Client.Version)
+	log.Debugf("vCenter version is: %q", vc.Client.Version)
 	return vc.Client.Version == cns.ReleaseVSAN67u3, nil
 }
 

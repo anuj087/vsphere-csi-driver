@@ -44,7 +44,7 @@ var (
 
 const (
 	migrationParamErrorMessage = "Invalid StorageClass Parameters. " +
-		"Migration specific parameters should not be used in the StorageClass"
+		"Migration specific parameters should not be used in the StorageClass."
 )
 
 // validateStorageClass helps validate AdmissionReview requests for StroageClass.
@@ -81,7 +81,7 @@ func validateStorageClass(ctx context.Context, ar *admissionv1.AdmissionReview) 
 		if allowed {
 			log.Infof("Validation of StorageClass: %q Passed", sc.Name)
 		} else {
-			log.Errorf("validation of StorageClass: %q Failed", sc.Name)
+			log.Errorf("Validation of StorageClass: %q failed", sc.Name)
 		}
 	default:
 		allowed = false

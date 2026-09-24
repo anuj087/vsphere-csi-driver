@@ -217,7 +217,7 @@ func validateDeleteCnsFileAccessConfig(ctx context.Context, clientConfig *rest.C
 	// it means that it is created by devops user or K8s admin
 	// and not by VKS (CSI service account).
 	if _, ok := cnsFileAccessConfig.Labels[devopsUserLabelKey]; ok {
-		log.Infof("CnsFileAccessConfig %s has devops user label. Allow this reqeust.",
+		log.Infof("CnsFileAccessConfig %s has devops user label. Allow this request.",
 			cnsFileAccessConfig.Name)
 		return &admissionv1.AdmissionResponse{
 			Allowed: true,
@@ -238,7 +238,7 @@ func validateDeleteCnsFileAccessConfig(ctx context.Context, clientConfig *rest.C
 		return &admissionv1.AdmissionResponse{
 			Allowed: false,
 			Result: &metav1.Status{
-				Message: fmt.Sprintf("User %s is not allowed to delete this CnsFileAccesConfig.",
+				Message: fmt.Sprintf("User %s is not allowed to delete this CnsFileAccessConfig.",
 					req.UserInfo.Username),
 			},
 		}
@@ -278,7 +278,7 @@ func validatePvCSIServiceAccount(ctx context.Context, username string, k8sClient
 	// Parse the username to extract namespace and service account name
 	const prefix = "system:serviceaccount:"
 	if !strings.HasPrefix(username, prefix) {
-		log.Warnf("Username : %s doesn't have service account prefix, returning false", username)
+		log.Warnf("Username: %s doesn't have service account prefix, returning false", username)
 		return false, nil
 	}
 
@@ -315,11 +315,11 @@ func validateProviderServiceAccount(ctx context.Context, namespace, serviceAccou
 
 	clusterName := strings.TrimSuffix(serviceAccountName, "-pvcsi")
 	if clusterName == "" {
-		log.Warnf("Empty vsphere cluster name extracted from service account '%s'", serviceAccountName)
+		log.Warnf("Empty vSphere cluster name extracted from service account '%s'", serviceAccountName)
 		return false, nil
 	}
 
-	log.Debugf("Extracted vsphere cluster name '%s' from service account '%s', searching in namespace '%s'",
+	log.Debugf("Extracted vSphere cluster name '%s' from service account '%s', searching in namespace '%s'",
 		clusterName, serviceAccountName, namespace)
 
 	// validate VSphereCluster resource exists

@@ -148,7 +148,7 @@ func validateWCPControllerExpandVolumeRequest(ctx context.Context, req *csi.Cont
 		vc, err := common.GetVCenter(ctx, manager)
 		if err != nil {
 			return logger.LogNewErrorCodef(log, codes.Internal,
-				"failed to get vcenter object with error: %+v", err)
+				"failed to get vCenter object with error: %+v", err)
 		}
 		dc := &vsphere.Datacenter{
 			Datacenter: object.NewDatacenter(vc.Client.Client,
@@ -304,7 +304,7 @@ func getVCDatacentersFromConfig(cfg *cnsconfig.Config) (map[string][]string, err
 		}
 	}
 	if len(vcdcMap) == 0 {
-		err = errors.New("unable get vCenter datacenters from vsphere config")
+		err = errors.New("unable to get vCenter datacenters from vSphere config")
 	}
 	return vcdcMap, err
 }
@@ -919,7 +919,7 @@ func validateControllerExpandVolumeRequestInWcp(ctx context.Context, req *csi.Co
 	} else if req.GetCapacityRange() == nil {
 		return logger.LogNewErrorCode(log, codes.InvalidArgument, "capacity range is a required parameter")
 	} else if req.GetCapacityRange().GetRequiredBytes() < 0 || req.GetCapacityRange().GetLimitBytes() < 0 {
-		return logger.LogNewErrorCode(log, codes.InvalidArgument, "capacity ranges values cannot be negative")
+		return logger.LogNewErrorCode(log, codes.InvalidArgument, "capacity range values cannot be negative")
 	}
 	// Validate Volume Capabilities.
 	volCaps := req.GetVolumeCapability()
@@ -1042,7 +1042,7 @@ func GetZonesFromAccessibilityRequirements(ctx context.Context,
 	topologyRequirement *csi.TopologyRequirement) ([]string, error) {
 	log := logger.GetLogger(ctx)
 	if topologyRequirement == nil {
-		return nil, fmt.Errorf("topologyRequirement can't we nil")
+		return nil, fmt.Errorf("topologyRequirement cannot be nil")
 	}
 	zoneKey := "topology.kubernetes.io/zone"
 	var zones []string
@@ -1056,7 +1056,7 @@ func GetZonesFromAccessibilityRequirements(ctx context.Context,
 		}
 	}
 	if len(zones) == 0 {
-		return nil, logger.LogNewErrorCodef(log, codes.Internal, "failed to retrieve zones for e nil")
+		return nil, logger.LogNewErrorCodef(log, codes.Internal, "failed to retrieve zones: none found")
 	}
 	return zones, nil
 }

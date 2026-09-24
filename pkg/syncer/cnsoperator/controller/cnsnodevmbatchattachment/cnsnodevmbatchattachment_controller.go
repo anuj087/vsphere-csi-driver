@@ -307,9 +307,9 @@ func (r *Reconciler) Reconcile(ctx context.Context,
 		// If VM is nil, it means it is deleted from the vCenter.
 		if instance.DeletionTimestamp == nil {
 			// If VM is deleted from the VC but CnsNodeVMBatchAttachment is not being deleted, it is an error.
-			err := fmt.Errorf("virtual Machine with UUID %s on vCenter does not exist. "+
-				"Vm is CR is deleted or is being deleted but"+
-				"CnsNodeVMBatchAttachmentInstance %s is not being deleted", instance.Spec.InstanceUUID, instance.Name)
+			err := fmt.Errorf("VirtualMachine with UUID %s on vCenter does not exist. "+
+				"VM CR is deleted or being deleted, but "+
+				"CnsNodeVMBatchAttachment instance %s is not being deleted", instance.Spec.InstanceUUID, instance.Name)
 			return r.completeReconciliationWithError(batchAttachCtx, instance, request.NamespacedName, timeout, err)
 		}
 		// If CnsNodeVMBatchAttachment is also being deleted, then all volumes on the instance can be considered detached.
@@ -483,7 +483,7 @@ func (r *Reconciler) detachVolumes(ctx context.Context,
 				volumesThatFailedToDetach = removeFinalizerAndStatusEntry(ctx, r.client, k8sClient,
 					r.cnsOperatorClient, instance, pvc, volumesThatFailedToDetach)
 			} else {
-				log.Errorf("failed to detach volume %s from VM %s. Fault: %s Err: %s",
+				log.Errorf("failed to detach volume %s from VM %s. Fault: %s. Err: %s",
 					pvc, instance.Spec.InstanceUUID, faulttype, detachErr)
 				// Update the instance with error for this PVC.
 				updateInstanceVolumeStatus(ctx, instance, "", pvc, "", "", detachErr,

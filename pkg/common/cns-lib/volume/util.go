@@ -300,7 +300,7 @@ func getTaskResultFromTaskInfo(ctx context.Context, taskInfo *types.TaskInfo) (c
 	// Get the taskResult.
 	taskResult, err := cns.GetTaskResult(ctx, taskInfo)
 	if err != nil {
-		log.Errorf("failed to get task result for task with ID: %q, opId: %q error: %+v",
+		log.Errorf("failed to get task result for task with ID: %q, opId: %q. error: %+v",
 			taskInfo.Task.Value, taskInfo.ActivationId, err)
 		return nil, err
 	}
@@ -336,7 +336,7 @@ func getCnsVolumeInfoFromTaskResult(ctx context.Context, virtualCenter *cnsvsphe
 	var placementClusters []types.ManagedObjectReference
 	var placementHost *types.ManagedObjectReference
 	volumeCreateResult := interface{}(taskResult).(*cnstypes.CnsVolumeCreateResult)
-	log.Debugf("volumeCreateResult.PlacementResults :%v", volumeCreateResult.PlacementResults)
+	log.Debugf("volumeCreateResult.PlacementResults: %v", volumeCreateResult.PlacementResults)
 	if volumeCreateResult.PlacementResults != nil {
 		var datastoreMoRef *types.ManagedObjectReference
 		for _, placementResult := range volumeCreateResult.PlacementResults {
@@ -347,11 +347,11 @@ func getCnsVolumeInfoFromTaskResult(ctx context.Context, virtualCenter *cnsvsphe
 				// placement result. Capture it so the caller can build PV node affinity.
 				if placementResult.Host != nil {
 					placementHost = placementResult.Host
-					log.Debugf("placementHost:%v for volume:%q", placementHost, volumeID)
+					log.Debugf("placementHost: %v for volume: %q", placementHost, volumeID)
 				}
 				if len(placementResult.Clusters) != 0 {
 					placementClusters = placementResult.Clusters
-					log.Debugf("placementClusters:%v for volume:%q", placementClusters, volumeID)
+					log.Debugf("placementClusters: %v for volume: %q", placementClusters, volumeID)
 				} else {
 					datastoreMoRef = &placementResult.Datastore
 					var dsMo mo.Datastore
@@ -363,7 +363,7 @@ func getCnsVolumeInfoFromTaskResult(ctx context.Context, virtualCenter *cnsvsphe
 						return nil, faultType, logger.LogNewErrorf(log, "failed to retrieve datastore summary property: %v", err)
 					}
 					datastoreURL = dsMo.Summary.Url
-					log.Debugf("datastoreURL: %q for volume:%q", datastoreURL, volumeID)
+					log.Debugf("datastoreURL: %q for volume: %q", datastoreURL, volumeID)
 				}
 				break
 			}
@@ -413,7 +413,7 @@ func ExtractFaultTypeFromVolumeResponseResult(ctx context.Context,
 		// For example, when CnsVolumeOperationrResult failed with ResourceInUse, faultType will be "*type.ResourceInUse".
 		if fault.Fault != nil {
 			faultType = reflect.TypeOf(fault.Fault).String()
-			log.Infof("Extract vimfault type: %+v  vimFault: %+v Fault: %+v from resp: %+v",
+			log.Infof("Extract vimfault type: %+v vimFault: %+v Fault: %+v from resp: %+v",
 				faultType, fault.Fault, fault, resp)
 			slice := strings.Split(faultType, ".")
 			vimFaultType := csifault.VimFaultPrefix + slice[1]

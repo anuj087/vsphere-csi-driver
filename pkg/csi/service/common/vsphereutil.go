@@ -131,7 +131,7 @@ func CreateBlockVolumeUtil(
 		createVolParams, ok := extraParams.(*cnsvolume.CreateVolumeExtraParams)
 		if !ok {
 			return nil, csifault.CSIInternalFault,
-				logger.LogNewErrorf(log, "unrecognised type for CreateVolume params: %+v", extraParams)
+				logger.LogNewErrorf(log, "unrecognized type for CreateVolume params: %+v", extraParams)
 		}
 		log.Debugf("Received CreateVolume extraParams: %+v", *createVolParams)
 		IsMultiClusterPerZoneEnabled = createVolParams.IsMultipleClustersPerVsphereZoneEnabled
@@ -330,7 +330,7 @@ func CreateBlockVolumeUtil(
 			createVolParams, ok := extraParams.(*cnsvolume.CreateVolumeExtraParams)
 			if !ok {
 				return nil, csifault.CSIInternalFault,
-					logger.LogNewErrorf(log, "unrecognised type for CreateVolume params: %+v", extraParams)
+					logger.LogNewErrorf(log, "unrecognized type for CreateVolume params: %+v", extraParams)
 			}
 			log.Debugf("Received CreateVolume extraParams: %+v", *createVolParams)
 			IsMultiClusterPerZoneEnabled = createVolParams.IsMultipleClustersPerVsphereZoneEnabled
@@ -573,10 +573,10 @@ func CreateBlockVolumeUtilForMultiVC(ctx context.Context, reqParams interface{},
 			// and createVolumeWithTransaction in cns-lib/volume/manager.go for why
 			// this can happen on a retry). Delete the out-of-scope volume and retry
 			// CreateVolume so it is placed within the current request's scope.
-			log.Infof("Observed volume with Id: %q is already Exists. Deleting Volume.", createSpec.VolumeId.Id)
+			log.Infof("Observed volume with Id: %q already exists. Deleting volume.", createSpec.VolumeId.Id)
 			_, deleteError := params.VolumeManager.DeleteVolume(ctx, createSpec.VolumeId.Id, true)
 			if deleteError != nil {
-				log.Errorf("failed to delete volume: %q, err :%v", createSpec.VolumeId.Id, err)
+				log.Errorf("failed to delete volume: %q, err: %v", createSpec.VolumeId.Id, err)
 				return nil, faultType, err
 			}
 			log.Infof("Attempt to re-create volume with Id: %q", createSpec.VolumeId.Id)
@@ -707,7 +707,7 @@ func CreateFileVolumeUtil(ctx context.Context, clusterFlavor cnstypes.CnsCluster
 		createVolParams, ok := extraParams.(*cnsvolume.CreateVolumeExtraParams)
 		if !ok {
 			return nil, csifault.CSIInternalFault,
-				logger.LogNewErrorf(log, "unrecognised type for CreateVolume params: %+v", extraParams)
+				logger.LogNewErrorf(log, "unrecognized type for CreateVolume params: %+v", extraParams)
 		}
 		log.Debugf("Received CreateVolume extraParams: %+v", *createVolParams)
 		IsMultiClusterPerZoneEnabled = createVolParams.IsMultipleClustersPerVsphereZoneEnabled
@@ -773,7 +773,7 @@ func AttachVolumeUtil(ctx context.Context, volumeManager cnsvolume.Manager,
 	log.Debugf("vSphere CSI driver is attaching volume: %q to vm: %q", volumeID, vm.String())
 	diskUUID, faultType, err := volumeManager.AttachVolume(ctx, vm, volumeID, checkNVMeController)
 	if err != nil {
-		log.Errorf("failed to attach disk %q with VM: %q. err: %+v faultType %q", volumeID, vm.String(), err, faultType)
+		log.Errorf("failed to attach disk %q with VM: %q. err: %+v, faultType: %q", volumeID, vm.String(), err, faultType)
 		return "", faultType, err
 	}
 	log.Debugf("Successfully attached disk %s to VM %v. Disk UUID is %s", volumeID, vm, diskUUID)
@@ -827,7 +827,7 @@ func ExpandVolumeUtil(ctx context.Context, vCenterManager vsphere.VirtualCenterM
 	// Checking if vsphere version is 8 and above.
 	vc, err := GetVCenterFromVCHost(ctx, vCenterManager, vCenterHost)
 	if err != nil {
-		log.Errorf("failed to get vcenter. err=%v", err)
+		log.Errorf("failed to get vCenter. err=%v", err)
 		return csifault.CSIInternalFault, err
 	}
 	isvSphere8AndAbove, err = IsvSphere8AndAbove(ctx, vc.Client.ServiceContent.About)
@@ -876,7 +876,7 @@ func ListSnapshotsUtil(ctx context.Context, volManager cnsvolume.Manager, volume
 		snapshots, err := QueryVolumeSnapshot(ctx, volManager, volID, snapID, maxEntries)
 		if err != nil {
 			// Failed to retrieve information of snapshot.
-			log.Errorf("failed to retrieve snapshot information for volume-id: %s snapshot-id: %s err: %+v", volID, snapID, err)
+			log.Errorf("failed to retrieve snapshot information for volume-id: %s, snapshot-id: %s. err: %+v", volID, snapID, err)
 			return nil, "", err
 		}
 		return snapshots, "", nil
@@ -977,7 +977,7 @@ func QueryAllVolumeSnapshots(ctx context.Context, volManager cnsvolume.Manager, 
 	if token != "" {
 		offset, err = strconv.ParseInt(token, 10, 64)
 		if err != nil {
-			log.Errorf("failed to parse the token: %s err: %v", token, err)
+			log.Errorf("failed to parse the token: %s. err: %v", token, err)
 			return nil, "", err
 		}
 	}
@@ -989,7 +989,7 @@ func QueryAllVolumeSnapshots(ctx context.Context, volManager cnsvolume.Manager, 
 	}
 	queryResultEntries, nextToken, err := utils.QuerySnapshotsUtil(ctx, volManager, queryFilter, maxEntries)
 	if err != nil {
-		log.Errorf("failed to retrieve all the volume snapshots in inventory err: %+v", err)
+		log.Errorf("failed to retrieve all the volume snapshots in inventory. err: %+v", err)
 		return nil, "", err
 	}
 	//populate list of volume-ids to retrieve the volume size.
@@ -1050,7 +1050,7 @@ func QueryVolumeSnapshotsByVolumeID(ctx context.Context, volManager cnsvolume.Ma
 	}
 	queryResultEntries, nextToken, err := utils.QuerySnapshotsUtil(ctx, volManager, queryFilter, maxEntries)
 	if err != nil {
-		log.Errorf("failed to retrieve csiSnapshots for volume-id: %s err: %+v", volumeID, err)
+		log.Errorf("failed to retrieve csiSnapshots for volume-id: %s. err: %+v", volumeID, err)
 		return nil, "", err
 	}
 	// Retrieve the volume size as an approximation for snapshot size.

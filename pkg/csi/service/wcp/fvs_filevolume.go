@@ -431,7 +431,7 @@ func (c *controller) createFileVolumeViaFVS(ctx context.Context, req *csi.Create
 			// If unable to get the FileVolume due to an unexpected error, return an internal fault.
 			// This helps leaving behing orphaned FileVolume CRs in the namespace.
 			return nil, csifault.CSIInternalFault, logger.LogNewErrorCodef(log, codes.Internal,
-				"failed to check for existing FileVolume %q in namespace %q: error :%v", fvName, ns, getErr)
+				"failed to check for existing FileVolume %q in namespace %q: error: %v", fvName, ns, getErr)
 		}
 	}
 

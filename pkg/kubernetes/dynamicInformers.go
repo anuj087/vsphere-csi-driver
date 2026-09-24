@@ -61,7 +61,7 @@ func NewDynamicInformerFactory(ctx context.Context, cfg *restclient.Config, name
 		// Grab a dynamic interface to create informer.
 		dc, err := dynamic.NewForConfig(cfg)
 		if err != nil {
-			log.Errorf("could not generate dynamic client for config. InCluster: %t Error :%v", isInCluster, err)
+			log.Errorf("could not generate dynamic client for config. InCluster: %t Error: %v", isInCluster, err)
 			return nil, err
 		}
 		dynamicInformerFactory = dynamicinformer.NewFilteredDynamicSharedInformerFactory(dc, 0, namespace, nil)

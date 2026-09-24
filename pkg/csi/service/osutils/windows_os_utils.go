@@ -82,7 +82,7 @@ func (osUtils *OsUtils) NodeStageBlockVolume(
 	if _, ok := req.GetVolumeCapability().GetAccessType().(*csi.VolumeCapability_Block); ok {
 		// Volume is a raw block volume.
 		return nil, logger.LogNewErrorCodef(log, codes.Internal,
-			"Stage for raw block Volume access type is currently not supported for windows node")
+			"stage for raw block volume access type is currently not supported for Windows node")
 	}
 
 	// Block Volume with Mount access type.
@@ -232,7 +232,7 @@ func (osUtils *OsUtils) PublishBlockVol(
 	log := logger.GetLogger(ctx)
 
 	return nil, logger.LogNewErrorCodef(log, codes.Internal,
-		"PublishBlockVol Raw Block devices are currently not supported by windows : %v",
+		"PublishBlockVol: raw block devices are currently not supported by Windows: %v",
 		logger.RedactCSIRequest(req))
 }
 
@@ -244,7 +244,7 @@ func (osUtils *OsUtils) PublishFileVol(
 	*csi.NodePublishVolumeResponse, error) {
 	log := logger.GetLogger(ctx)
 	return nil, logger.LogNewErrorCodef(log, codes.Internal,
-		"PublishBlockVol File Volumes are currently not supported by windows : %v",
+		"PublishFileVol: file volumes are currently not supported by Windows: %v",
 		logger.RedactCSIRequest(req))
 }
 
@@ -373,7 +373,7 @@ func (osUtils *OsUtils) GetVolumeCapabilityFsType(ctx context.Context,
 	if isFileVolume {
 		// Volumes with RWM or ROM access modes are not supported on Windows
 		return "", logger.LogNewErrorCode(log, codes.FailedPrecondition,
-			"vSAN file service volume can not be mounted on windows node")
+			"vSAN file service volume cannot be mounted on a Windows node")
 	}
 
 	// On Windows we only support ntfs filesystem. External-provisioner sets default fstype as ext4
@@ -506,7 +506,7 @@ func (osUtils *OsUtils) ConvertUUID(uuid string) (string, error) {
 func (osUtils *OsUtils) ShouldContinue(ctx context.Context) {
 	log := logger.GetLogger(ctx)
 	if !commonco.ContainerOrchestratorUtility.IsFSSEnabled(ctx, common.CSIWindowsSupport) {
-		log.Errorf("csi plugin started on windows node without enabling feature switch")
+		log.Errorf("CSI plugin started on Windows node without enabling feature switch")
 		os.Exit(1)
 	}
 	return

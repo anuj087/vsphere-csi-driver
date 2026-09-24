@@ -438,7 +438,7 @@ func validateGuestPVCOperation(ctx context.Context, req *admissionv1.AdmissionRe
 		return &admissionv1.AdmissionResponse{
 			Allowed: false,
 			Result: &metav1.Status{
-				Message: "datasource type is incorrect for linked clone pvc request, epxected snapshot.storage.k8s.io",
+				Message: "datasource type is incorrect for linked clone pvc request, expected snapshot.storage.k8s.io",
 			},
 		}
 	}
@@ -448,7 +448,7 @@ func validateGuestPVCOperation(ctx context.Context, req *admissionv1.AdmissionRe
 		return &admissionv1.AdmissionResponse{
 			Allowed: false,
 			Result: &metav1.Status{
-				Message: "datasource Kind is incorrect for linked clone request, epxected VolumeSnapshot",
+				Message: "datasource Kind is incorrect for linked clone request, expected VolumeSnapshot",
 			},
 		}
 	}
@@ -458,7 +458,7 @@ func validateGuestPVCOperation(ctx context.Context, req *admissionv1.AdmissionRe
 		return &admissionv1.AdmissionResponse{
 			Allowed: false,
 			Result: &metav1.Status{
-				Message: fmt.Sprintf("failed to get k8s client when validating linkedclone request"+
+				Message: fmt.Sprintf("failed to get k8s client when validating LinkedClone request"+
 					" with error: %v", err),
 			},
 		}
@@ -469,7 +469,7 @@ func validateGuestPVCOperation(ctx context.Context, req *admissionv1.AdmissionRe
 		return &admissionv1.AdmissionResponse{
 			Allowed: false,
 			Result: &metav1.Status{
-				Message: fmt.Sprintf("failed to get snapshotterClient when validating linkedclone request"+
+				Message: fmt.Sprintf("failed to get snapshotter client when validating LinkedClone request"+
 					" with error: %v", err),
 			},
 		}
@@ -512,7 +512,7 @@ func validateGuestPVCOperation(ctx context.Context, req *admissionv1.AdmissionRe
 
 	// Validate that ReadyToUse is set
 	if volumeSnapshot.Status != nil && volumeSnapshot.Status.ReadyToUse == nil {
-		errMsg := fmt.Sprintf("volumeSnapshot %s is ReadyToUse is unavailable, failing linkedclone request",
+		errMsg := fmt.Sprintf("volumeSnapshot %s ReadyToUse is unavailable, failing linkedclone request",
 			volumeSnapshot.Name)
 		return &admissionv1.AdmissionResponse{
 			Allowed: false,
@@ -578,7 +578,7 @@ func validateGuestPVCOperation(ctx context.Context, req *admissionv1.AdmissionRe
 
 		// Validate LinkedClone PVC StorageClass
 		if linkedClonePVCStorageClassName == nil {
-			errMsg := "LinkedClone PVC does not have a StorageClass specified," +
+			errMsg := "LinkedClone PVC does not have a StorageClass specified, " +
 				"please specify a StorageClass for linked clone creation"
 			return &admissionv1.AdmissionResponse{
 				Allowed: false,

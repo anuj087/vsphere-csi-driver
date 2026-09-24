@@ -532,7 +532,7 @@ func (m *defaultManager) MonitorCreateVolumeTask(ctx context.Context,
 			}
 		}
 		if err != nil {
-			log.Errorf("err:%v observed for task: %v, volume name: %q, OpID: %q",
+			log.Errorf("err: %v observed for task: %v, volume name: %q, OpID: %q",
 				err.Error(), task.Reference().Value, volNameFromInputSpec, taskInfo.ActivationId)
 			*volumeOperationDetails = createRequestDetails(volNameFromInputSpec, "", "", 0,
 				(*volumeOperationDetails).QuotaDetails, (*volumeOperationDetails).OperationDetails.TaskInvocationTimestamp,
@@ -582,7 +582,7 @@ func (m *defaultManager) createVolumeWithImprovedIdempotency(ctx context.Context
 		createVolParams, ok := extraParams.(*CreateVolumeExtraParams)
 		if !ok {
 			return nil, csifault.CSIInternalFault,
-				logger.LogNewErrorf(log, "unrecognised type for CreateVolume params: %+v", extraParams)
+				logger.LogNewErrorf(log, "unrecognized type for CreateVolume params: %+v", extraParams)
 		}
 		log.Debugf("Received CreateVolume extraParams: %+v", *createVolParams)
 
@@ -742,7 +742,7 @@ func (m *defaultManager) createVolumeWithTransaction(ctx context.Context, spec *
 		createVolParams, ok := extraParams.(*CreateVolumeExtraParams)
 		if !ok {
 			return nil, csifault.CSIInternalFault,
-				logger.LogNewErrorf(log, "unrecognised type for CreateVolume params: %+v", extraParams)
+				logger.LogNewErrorf(log, "unrecognized type for CreateVolume params: %+v", extraParams)
 		}
 		log.Debugf("Received CreateVolume extraParams: %+v", *createVolParams)
 
@@ -1068,10 +1068,10 @@ func (m *defaultManager) CreateVolume(ctx context.Context, spec *cnstypes.CnsVol
 						// unique to this PVC, so deleting it cannot affect any other volume,
 						// and the recreate lands the volume within the scope this request
 						// actually asked for.
-						log.Infof("Observed volume with Id: %q is already Exists. Deleting Volume.", spec.VolumeId.Id)
+						log.Infof("Observed volume with Id: %q already exists. Deleting volume.", spec.VolumeId.Id)
 						deleteFaultType, deleteError := m.deleteVolume(ctx, spec.VolumeId.Id, true)
 						if deleteError != nil {
-							log.Errorf("failed to delete volume: %q to handle CnsVolumeAlreadyExistsFault , err :%v", spec.VolumeId.Id, err)
+							log.Errorf("failed to delete volume: %q to handle CnsVolumeAlreadyExistsFault, err: %v", spec.VolumeId.Id, err)
 							return nil, deleteFaultType, deleteError
 						}
 						log.Infof("Attempt to re-create volume with Id: %q", spec.VolumeId.Id)
@@ -1311,7 +1311,7 @@ func (m *defaultManager) DetachVolume(ctx context.Context, vm *cnsvsphere.Virtua
 				// Detach failed with managed object not found, marking detach as
 				// successful, as Node VM is deleted and not present in the vCenter
 				// inventory.
-				log.Infof("Node VM: %v not found on vCenter. Marking Detach for volume:%q successful. err: %v",
+				log.Infof("Node VM: %v not found on vCenter. Marking Detach for volume: %q successful. err: %v",
 					vm, volumeID, err)
 				return "", nil
 			}
@@ -1329,7 +1329,7 @@ func (m *defaultManager) DetachVolume(ctx context.Context, vm *cnsvsphere.Virtua
 					return "", nil
 				}
 			}
-			return faultType, logger.LogNewErrorf(log, "failed to detach cns volume:%q from node vm: %+v. err: %v",
+			return faultType, logger.LogNewErrorf(log, "failed to detach cns volume: %q from node vm: %+v. err: %v",
 				volumeID, vm, err)
 		}
 		// Get the taskInfo.
@@ -1391,7 +1391,7 @@ func (m *defaultManager) DetachVolume(ctx context.Context, vm *cnsvsphere.Virtua
 					// Detach failed with managed object not found, marking detach as
 					// successful, as Node VM is deleted and not present in the vCenter
 					// inventory.
-					log.Infof("DetachVolume: Node VM: %v not found on vCenter. Marking Detach for volume:%q successful.",
+					log.Infof("DetachVolume: Node VM: %v not found on vCenter. Marking Detach for volume: %q successful.",
 						vm, volumeID)
 					return "", nil
 				}
@@ -1415,7 +1415,7 @@ func (m *defaultManager) DetachVolume(ctx context.Context, vm *cnsvsphere.Virtua
 			}
 			log.Errorf("failed to detach cns volume: %q from node vm: %+v. fault: %+v, opId: %q",
 				volumeID, vm, spew.Sdump(volumeOperationRes.Fault), taskInfo.ActivationId)
-			return faultType, fmt.Errorf("failed to detach cns volume: %q, Error: %s,",
+			return faultType, fmt.Errorf("failed to detach cns volume: %q, Error: %s",
 				volumeID, volumeOperationRes.Fault.LocalizedMessage)
 		}
 		log.Infof("DetachVolume: Volume detached successfully. volumeID: %q, vm: %q, opId: %q",
@@ -2063,7 +2063,7 @@ func (m *defaultManager) expandVolumeWithImprovedIdempotency(ctx context.Context
 		expandVolParams, ok := extraParams.(*ExpandVolumeExtraParams)
 		if !ok {
 			return csifault.CSIInternalFault,
-				logger.LogNewErrorf(log, "unrecognised type for ExpandVolume params: %+v", extraParams)
+				logger.LogNewErrorf(log, "unrecognized type for ExpandVolume params: %+v", extraParams)
 		}
 		log.Debugf("Received ExpandVolume extraParams: %+v", expandVolParams)
 
@@ -2757,7 +2757,7 @@ func (m *defaultManager) createSnapshotWithImprovedIdempotencyCheck(ctx context.
 	if extraParams != nil {
 		createSnapParams, ok := extraParams.(*CreateSnapshotExtraParams)
 		if !ok {
-			return nil, logger.LogNewErrorf(log, "unrecognised type for CreateSnapshot params: %+v", extraParams)
+			return nil, logger.LogNewErrorf(log, "unrecognized type for CreateSnapshot params: %+v", extraParams)
 		}
 		log.Debugf("Received CreateSnapshot extraParams: %+v", *createSnapParams)
 
@@ -3095,7 +3095,7 @@ func (m *defaultManager) createSnapshotWithTransaction(ctx context.Context, volu
 		createSnapParams, ok := extraParams.(*CreateSnapshotExtraParams)
 		if !ok {
 			return nil, csifault.CSIInternalFault,
-				logger.LogNewErrorf(log, "unrecognised type for CreateSnapshot params: %+v", extraParams)
+				logger.LogNewErrorf(log, "unrecognized type for CreateSnapshot params: %+v", extraParams)
 		}
 		log.Debugf("Received CreateSnapshot extraParams: %+v", *createSnapParams)
 
@@ -3262,7 +3262,7 @@ func (m *defaultManager) CreateSnapshot(
 			var typeAssertOk bool
 			createSnapParams, typeAssertOk = extraParams.(*CreateSnapshotExtraParams)
 			if !typeAssertOk {
-				return nil, logger.LogNewErrorf(log, "unrecognised type for CreateSnapshot params: %+v", extraParams)
+				return nil, logger.LogNewErrorf(log, "unrecognized type for CreateSnapshot params: %+v", extraParams)
 			}
 		}
 		if createSnapParams != nil && createSnapParams.IsCSITransactionSupportEnabled {
@@ -3274,7 +3274,7 @@ func (m *defaultManager) CreateSnapshot(
 						"Re-creating Snapshot without setting Snapshot ID in the spec")
 					return m.createSnapshotWithImprovedIdempotencyCheck(ctx, volumeID, snapshotName, extraParams)
 				} else {
-					return nil, logger.LogNewErrorf(log, "failed to create snapshot. error :%+v", err)
+					return nil, logger.LogNewErrorf(log, "failed to create snapshot. error: %+v", err)
 				}
 			}
 			return cnssnapshotInfo, nil
@@ -3321,7 +3321,7 @@ func (m *defaultManager) deleteSnapshotWithImprovedIdempotencyCheck(
 	if extraParams != nil {
 		deleteSnapParams, ok := extraParams.(*DeletesnapshotExtraParams)
 		if !ok {
-			return nil, logger.LogNewErrorf(log, "unrecognised type for Deletesnapshot params: %+v", extraParams)
+			return nil, logger.LogNewErrorf(log, "unrecognized type for Deletesnapshot params: %+v", extraParams)
 		}
 		log.Infof("Received Deletesnapshot extraParams: %+v", *deleteSnapParams)
 		isStorageQuotaM2FSSEnabled = deleteSnapParams.IsStorageQuotaM2FSSEnabled
@@ -4481,7 +4481,7 @@ func TranslateVslmError(ctx context.Context, err error) error {
 	errMsg := err.Error()
 
 	if !soap.IsSoapFault(err) {
-		return logger.LogNewErrorCodef(log, codes.Internal, "failed with error 1: %v", err)
+		return logger.LogNewErrorCodef(log, codes.Internal, "failed with error: %v", err)
 	}
 	fault := soap.ToSoapFault(err).VimFault()
 	if fault == nil {

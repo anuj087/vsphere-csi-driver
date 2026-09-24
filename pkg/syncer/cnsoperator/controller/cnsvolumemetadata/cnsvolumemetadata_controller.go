@@ -331,7 +331,7 @@ func (r *ReconcileCnsVolumeMetadata) updateCnsMetadata(ctx context.Context,
 		return false
 	}
 	if vCenter.Config == nil {
-		log.Errorf("ReconcileCnsVolumeMetadata: vcenter config is empty")
+		log.Errorf("ReconcileCnsVolumeMetadata: vCenter config is empty")
 		return false
 	}
 	host := vCenter.Config.Host

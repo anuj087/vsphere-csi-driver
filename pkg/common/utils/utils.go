@@ -47,7 +47,7 @@ func ListVirtualMachines(ctx context.Context, vmOperatorClient client.Client,
 	vmList := &vmoperatortypes.VirtualMachineList{}
 	err := vmOperatorClient.List(ctx, vmList, client.InNamespace(namespace))
 	if err != nil {
-		log.Error("failed listing virtual machines for v1alpha2: ", err)
+		log.Errorf("failed listing virtual machines for v1alpha2: %v", err)
 		return nil, err
 	}
 	log.Infof("Successfully listed %d virtual machines in namespace %s",
@@ -62,7 +62,7 @@ func ListVirtualMachinesAllNamespaces(ctx context.Context,
 	vmList := &vmoperatortypes.VirtualMachineList{}
 	err := vmOperatorClient.List(ctx, vmList)
 	if err != nil {
-		log.Error("failed listing virtual machines for v1alpha2: ", err)
+		log.Errorf("failed listing virtual machines for v1alpha2: %v", err)
 		return nil, err
 	}
 	log.Infof("Successfully listed %d virtual machines in all namespaces",

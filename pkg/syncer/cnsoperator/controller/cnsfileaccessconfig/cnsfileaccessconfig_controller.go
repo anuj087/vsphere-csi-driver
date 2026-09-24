@@ -736,7 +736,7 @@ func (r *ReconcileCnsFileAccessConfig) configureNetPermissionsForFileVolume(ctx 
 	err = cnsFileVolumeClientInstance.RemoveClientVMFromIPList(ctx,
 		instance.Namespace+"/"+instance.Spec.PvcName, instance.Spec.VMName, tkgVMIP)
 	if err != nil {
-		return logger.LogNewErrorf(log, "Failed to remove VM %q with IP %q to IPList. Error: %+v", vm.Name, tkgVMIP, err)
+		return logger.LogNewErrorf(log, "Failed to remove VM %q with IP %q from IPList. Error: %+v", vm.Name, tkgVMIP, err)
 	}
 	log.Infof("Successfully removed VM IP %q from IPList for CnsFileAccessConfig request with name: %q on namespace: %q",
 		tkgVMIP, instance.Name, instance.Namespace)
@@ -769,7 +769,7 @@ func (r *ReconcileCnsFileAccessConfig) configureVolumeACLs(ctx context.Context,
 		VolumeId:              cnsVolumeID,
 		AccessControlSpecList: cnsNFSAccessControlSpecList,
 	}
-	log.Debugf("CnsVolumeACLConfigSpec : %v", cnsVolumeACLConfigSpec)
+	log.Debugf("CnsVolumeACLConfigSpec: %v", cnsVolumeACLConfigSpec)
 	err := r.volumeManager.ConfigureVolumeACLs(ctx, cnsVolumeACLConfigSpec)
 	if err != nil {
 		return logger.LogNewErrorf(log, "Failed to configure ACLs for volume: %q. Error: %+v", volumeID, err)

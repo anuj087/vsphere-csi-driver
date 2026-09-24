@@ -239,7 +239,7 @@ func (volumeInfo *volumeInfo) CreateVolumeInfoWithPolicyInfo(ctx context.Context
 		log.Infof("cnsvolumeInfo CR already exists for VolumeID: %q", volumeID)
 		return nil
 	}
-	log.Infof("Successfully created CNSVolumeInfo CR for volumeID: %q ,StoragePolicyID: %q,"+
+	log.Infof("Successfully created CNSVolumeInfo CR for volumeID: %q, StoragePolicyID: %q, "+
 		"StorageClassName: %q, vCenter: %q, Capacity: %+v mapping in the namespace: %q. IsLinkedClone: %+v",
 		volumeID, storagePolicyId, storageClassName, vCenter, *capacity, csiNamespace, isLinkedClone)
 	return nil

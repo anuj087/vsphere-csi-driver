@@ -947,13 +947,13 @@ func updateSVPVC(ctx context.Context, client client.Client,
 						"will be invoked.", pvc.Name, pvc.Namespace)
 					return csifault.CSIResourceUpdateConflictFault, err
 				} else {
-					log.Errorf("failed to update SV PVC : %q on namespace: %q. Error: %+v",
+					log.Errorf("failed to update SV PVC: %q on namespace: %q. Error: %+v",
 						pvc.Name, pvc.Namespace, err)
 					return csifault.CSIApiServerOperationFault, err
 				}
 			}
 		} else {
-			log.Errorf("failed to update SV PVC : %q on namespace: %q. Error: %+v",
+			log.Errorf("failed to update SV PVC: %q on namespace: %q. Error: %+v",
 				pvc.Name, pvc.Namespace, err)
 			return csifault.CSIApiServerOperationFault, err
 		}
@@ -1020,7 +1020,7 @@ func getVCDatacentersFromConfig(cfg *config.Config) (map[string][]string, error)
 		}
 	}
 	if len(vcdcMap) == 0 {
-		err = errors.New("unable get vCenter datacenters from vsphere config")
+		err = errors.New("unable to get vCenter datacenters from vSphere config")
 	}
 	return vcdcMap, err
 }

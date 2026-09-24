@@ -306,9 +306,9 @@ func TestCnsNodeVMBatchAttachmentWhenVmOnVcenterReturnsNotFoundErrorAndInstanceI
 				t.Fatalf("failed to get cnsnodevmbatchattachemnt instance")
 			}
 
-			expectedReconcileError := fmt.Errorf("virtual Machine with UUID %s on vCenter does not exist. "+
-				"Vm is CR is deleted or is being deleted but"+
-				"CnsNodeVMBatchAttachmentInstance %s is not being deleted", nodeUUID, testCnsNodeVMBatchAttachmentName)
+			expectedReconcileError := fmt.Errorf("VirtualMachine with UUID %s on vCenter does not exist. "+
+				"VM CR is deleted or being deleted, but "+
+				"CnsNodeVMBatchAttachment instance %s is not being deleted", nodeUUID, testCnsNodeVMBatchAttachmentName)
 			expectedErrorMsg := expectedReconcileError.Error()
 			assert.Equal(t, expectedErrorMsg, updatedCnsNodeVMBatchAttachment.Status.Conditions[0].Message)
 		})

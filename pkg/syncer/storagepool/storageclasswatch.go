@@ -127,7 +127,7 @@ func (w *StorageClassWatch) watchStorageClass(ctx context.Context) {
 				if err != nil {
 					// XXX: Not sure how to handle this, as we need this watch.
 					// So crash and let restart perform any remediation required.
-					log.Error(err, "Fatal event, couldn't renew storage class watch")
+					log.Error(err, "Fatal event, couldn't renew StorageClass watch")
 					os.Exit(3)
 					return
 				}

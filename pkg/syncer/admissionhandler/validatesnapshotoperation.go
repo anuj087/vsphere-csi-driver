@@ -90,7 +90,7 @@ func validateSnapshotOperationGuestRequest(ctx context.Context, req *admissionv1
 		if *vs.Spec.VolumeSnapshotClassName != "" {
 			snapshotterClient, err := newSnapshotterClient(ctx)
 			if err != nil {
-				reason := fmt.Sprintf("failed to get snapshotterClient with error: %v. for class %s",
+				reason := fmt.Sprintf("failed to get snapshotterClient with error: %v for class %s",
 					err, *vs.Spec.VolumeSnapshotClassName)
 				log.Warn(reason)
 				return admission.Denied(reason)
@@ -132,7 +132,7 @@ func validateSnapshotOperationSupervisorRequest(ctx context.Context,
 				log.Warn(reason)
 				return admission.Denied(reason)
 			}
-			log.Debugf("Validating VolumeSnapshot LinkedClone count:%s/%s", vs.Namespace, vs.Name)
+			log.Debugf("Validating VolumeSnapshot LinkedClone count: %s/%s", vs.Namespace, vs.Name)
 
 			// Check if the namespace is being deleted. If so, allow the VolumeSnapshot deletion.
 			if isNamespaceBeingDeleted(ctx, vs.Namespace) {
@@ -167,7 +167,7 @@ func checkIfLinkedClonesExist(ctx context.Context, vs snap.VolumeSnapshot) admis
 		LabelSelector: labelSelector.String(),
 	})
 	if err != nil {
-		errMsg := fmt.Sprintf("error when checking if there are linkedclones created from volume snapshot, "+
+		errMsg := fmt.Sprintf("error when checking if there are linked clones created from volume snapshot, "+
 			"failed to list PVs with error: %v", err)
 		return admission.Denied(errMsg)
 	}

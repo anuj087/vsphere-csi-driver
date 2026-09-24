@@ -198,7 +198,7 @@ func (rc *storagePolicyQuotaReconciler) syncStoragePolicyQuotaAddCase(ctx contex
 	_, err := getOrCreateStoragePolicyUsageCR(ctx, storagePolicyQuota.Spec.StoragePolicyId,
 		storagePolicyQuota.Namespace, rc.metadataSyncerInformer)
 	if err != nil {
-		log.Errorf("syncStoragePolicyQuotaAddCase: Could not create StoragePolicyUsage CR for %s/%s err: %v",
+		log.Errorf("syncStoragePolicyQuotaAddCase: Could not create StoragePolicyUsage CR for %s/%s. Err: %v",
 			storagePolicyQuota.Namespace, storagePolicyQuota.Name, err)
 		return err
 	}
@@ -218,7 +218,7 @@ func (rc *storagePolicyQuotaReconciler) syncStoragePolicyQuotaDelCase(ctx contex
 	err := deleteStoragePolicyUsageCR(ctx, storagePolicyQuota.Spec.StoragePolicyId,
 		storagePolicyQuota.Namespace, rc.metadataSyncerInformer)
 	if err != nil {
-		log.Errorf("syncStoragePolicyQuotaDelCase: Could not delete StoragePolicyUsage CR for %s/%s err: %v",
+		log.Errorf("syncStoragePolicyQuotaDelCase: Could not delete StoragePolicyUsage CR for %s/%s. Err: %v",
 			storagePolicyQuota.Namespace, storagePolicyQuota.Name, err)
 		return err
 	}

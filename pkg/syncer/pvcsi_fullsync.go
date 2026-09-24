@@ -215,7 +215,7 @@ func cleanUpCnsVolumeMetadata(ctx context.Context, metadataSyncer *metadataSyncI
 	cnsVolumeMetadataList *cnsvolumemetadatav1alpha1.CnsVolumeMetadataList) {
 	log := logger.GetLogger(ctx)
 	log.Info("cleanUpCnsVolumeMetadata: deleting the CnsVolumeMetadata CRs " +
-		"created on legacy vsphere kubernetes releases")
+		"created on legacy vSphere Kubernetes releases")
 	toDeleteCnsVolumeMetadataList := cnsvolumemetadatav1alpha1.CnsVolumeMetadataList{}
 	cnsVolMetadataMap := make(map[string]int)
 	for _, object := range cnsVolumeMetadataList.Items {
@@ -239,7 +239,7 @@ func cleanUpCnsVolumeMetadata(ctx context.Context, metadataSyncer *metadataSyncI
 		}
 	}
 	log.Info("cleanUpCnsVolumeMetadata: cleaned up duplicate CnsVolumeMetadata CRs " +
-		"created on legacy vsphere kubernetes releases")
+		"created on legacy vSphere Kubernetes releases")
 }
 
 // createCnsVolumeMetadataList creates cnsvolumemetadata objects from the API
@@ -334,7 +334,7 @@ func createCnsVolumeMetadataList(ctx context.Context, metadataSyncer *metadataSy
 			volumeNames = append(volumeNames, volumeName)
 		}
 		if len(volumeNames) > 0 {
-			log.Debugf("Pod %q claims vsphere volumes %v", pod.Name, volumeNames)
+			log.Debugf("Pod %q claims vSphere volumes %v", pod.Name, volumeNames)
 			podObject := cnsvolumemetadatav1alpha1.CreateCnsVolumeMetadataSpec(
 				volumeNames, metadataSyncer.configInfo.Cfg.GC, string(pod.UID), pod.Name,
 				cnsvolumemetadatav1alpha1.CnsOperatorEntityTypePOD, nil, pod.Namespace, entityReferences)
@@ -392,7 +392,7 @@ func AddNodeAffinityRulesOnPV(ctx context.Context, metadataSyncer *metadataSyncI
 			accessibleTopologies, err := generateVolumeAccessibleTopologyFromPVCAnnotation(supervisorPVClaim)
 			if err != nil {
 				log.Errorf("failed to generate volume accessibleTopologies "+
-					"from supervisor PVC: %v for csi.vsphere.volume-accessible-topology annoation: %v, "+
+					"from supervisor PVC: %v for csi.vsphere.volume-accessible-topology annotation: %v. "+
 					"Err: %v", supervisorPVClaim.Name,
 					supervisorPVClaim.Annotations[common.AnnVolumeAccessibleTopology], err)
 				return err
@@ -425,13 +425,13 @@ func AddNodeAffinityRulesOnPV(ctx context.Context, metadataSyncer *metadataSyncI
 
 			patchBytes, err := strategicpatch.CreateTwoWayMergePatch(oldData, newData, pv)
 			if err != nil {
-				log.Errorf("error Creating two way merge patch for PV %q with error : %v", pv.Name, err)
+				log.Errorf("error creating two way merge patch for PV %q with error: %v", pv.Name, err)
 				return err
 			}
 			_, err = k8sClient.CoreV1().PersistentVolumes().Patch(
 				context.TODO(), pv.Name, types.StrategicMergePatchType, patchBytes, metav1.PatchOptions{})
 			if err != nil {
-				log.Errorf("error patching PV %q error : %v", pv.Name, err)
+				log.Errorf("error patching PV %q with error: %v", pv.Name, err)
 				return err
 			}
 			log.Infof("patched PV: %v with node affinity %v", pv.Name, newPV.Spec.NodeAffinity)

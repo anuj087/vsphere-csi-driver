@@ -66,7 +66,7 @@ var (
 func Add(mgr manager.Manager, clusterFlavor cnstypes.CnsClusterFlavor) error {
 	ctx, log := logger.GetNewContextWithLogger()
 	if clusterFlavor != cnstypes.CnsClusterFlavorWorkload {
-		log.Debug("Not initializing the K8s Controller as its a non-WCP CSI deployment")
+		log.Debug("Not initializing the K8s Controller as it is a non-WCP CSI deployment")
 		return nil
 	}
 	// Initializes kubernetes client.

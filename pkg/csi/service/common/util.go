@@ -280,14 +280,14 @@ func ParseStorageClassParams(ctx context.Context, params map[string]string) (*St
 				param == DiskstripesMigrationParam || param == ObjectspacereservationMigrationParam ||
 				param == IopslimitMigrationParam {
 				return nil, fmt.Errorf("vSphere CSI driver does not support creating volume using "+
-					"in-tree vSphere volume plugin parameter key:%v, value:%v", param, value)
+					"in-tree vSphere volume plugin parameter key: %v, value: %v", param, value)
 			} else {
-				return nil, fmt.Errorf("invalid parameter. key:%v, value:%v", param, value)
+				return nil, fmt.Errorf("invalid parameter. key: %v, value: %v", param, value)
 			}
 		}
 	} else {
 		if len(otherParams) != 0 {
-			return nil, fmt.Errorf("invalid parameters :%v", otherParams)
+			return nil, fmt.Errorf("invalid parameters: %v", otherParams)
 		}
 	}
 
@@ -414,7 +414,7 @@ func GetClusterComputeResourceMoIds(ctx context.Context) ([]string, bool, error)
 			"clusterComputeResourceMoIDs")
 		if !found || err != nil {
 			return nil, multipleClustersPerAZ, fmt.Errorf("failed to get ClusterComputeResourceMoIDs "+
-				"from AvailabilityZone instance: %+v, err:%+v", az.Object, err)
+				"from AvailabilityZone instance: %+v, err: %+v", az.Object, err)
 		}
 		if len(clusterComputeResourceMoIdSlice) > 1 {
 			multipleClustersPerAZ = true
@@ -484,7 +484,7 @@ func ExtractVolumeIDFromPVName(ctx context.Context, volumeName string) (string, 
 	matches := re.FindStringSubmatch(volumeName)
 
 	if len(matches) != 2 {
-		return "", logger.LogNewErrorf(log, "failed to extract UID from volumeName name: %q", volumeName)
+		return "", logger.LogNewErrorf(log, "failed to extract UID from volume name: %q", volumeName)
 	}
 	return matches[1], nil
 }

@@ -209,7 +209,7 @@ func (m *defaultVirtualCenterManager) IsCnsSnapshotSupported(ctx context.Context
 	vcVersion := vcenter.Client.ServiceContent.About.Version
 	isvSphere70U3orAbove, err := IsvSphereVersion70U3orAbove(ctx, vcenter.Client.ServiceContent.About)
 	if err != nil {
-		return false, logger.LogNewErrorf(log, "Error while checking the vSphere Version %q , Err= %+v",
+		return false, logger.LogNewErrorf(log, "Error while checking the vSphere Version %q, Err= %+v",
 			vcVersion, err)
 	}
 	if isvSphere70U3orAbove {
@@ -233,7 +233,7 @@ func (m *defaultVirtualCenterManager) IsCnsTransactionSupported(ctx context.Cont
 	vcVersion := vcenter.Client.ServiceContent.About.Version
 	isvSphereVersion91orAbove, err := IsvSphereVersion91orAbove(ctx, vcenter.Client.ServiceContent.About)
 	if err != nil {
-		return false, logger.LogNewErrorf(log, "Error while checking the vSphere Version %q , Err= %+v",
+		return false, logger.LogNewErrorf(log, "Error while checking the vSphere Version %q, Err= %+v",
 			vcVersion, err)
 	}
 	if isvSphereVersion91orAbove {

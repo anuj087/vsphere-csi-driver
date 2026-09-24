@@ -263,7 +263,7 @@ func (pendingCRUpdatesObj *pendingCRUpdates) processPendingCRUpdates() {
 						pendingCRUpdatesObj.namespaceUpdateMap[namespace] = false
 						log.Infof("Created cnsCsiSvFeatureStates CR instance in the namespace: %q", namespace)
 					} else {
-						log.Errorf("failed to check if cnsCsiSvFeatureStates CR is present in the namespace :%q, err: %v",
+						log.Errorf("failed to check if cnsCsiSvFeatureStates CR is present in the namespace: %q, err: %v",
 							namespace, err)
 					}
 				}
@@ -453,12 +453,12 @@ func getFeatureStates(ctx context.Context) ([]featurestatesv1alpha1.FeatureState
 				supervisorFeatureStatConfigMapName, supervisorFeatureStateConfigMapNamespace)
 			os.Exit(1)
 		}
-		log.Errorf("failed to retrieve SV feature switch state from namespace:%q with name: %q",
+		log.Errorf("failed to retrieve SV feature switch state from namespace: %q with name: %q",
 			supervisorFeatureStateConfigMapNamespace, supervisorFeatureStatConfigMapName)
 		return nil, err
 	}
 
-	log.Infof("Successfully retrieved SV feature switch state from namespace:%q with name: %q",
+	log.Infof("Successfully retrieved SV feature switch state from namespace: %q with name: %q",
 		supervisorFeatureStateConfigMapNamespace, supervisorFeatureStatConfigMapName)
 	var featureStates []featurestatesv1alpha1.FeatureState
 	for feature, state := range fssConfigMap.Data {

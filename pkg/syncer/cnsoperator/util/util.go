@@ -240,7 +240,7 @@ func vmPrimaryIPFromVirtualMachine(ctx context.Context, vm *vmoperatortypes.Virt
 	if ip == "" {
 		ip = vm.Status.Network.PrimaryIP6
 		if ip == "" {
-			return "", fmt.Errorf("vm.Status.Network.PrimaryIP6 & PrimaryIP4 is not populated for %s/%s",
+			return "", fmt.Errorf("vm.Status.Network.PrimaryIP4 and PrimaryIP6 are not populated for %s/%s",
 				vmNamespace, vmName)
 		}
 	}
@@ -284,7 +284,7 @@ func resolveNSXTExternalIP(ctx context.Context, dc dynamic.Interface, vmNamespac
 			return vmPrimaryIPFromVirtualMachine(ctx, virtualMachineInstance, vmNamespace, vmName)
 		}
 		return "", fmt.Errorf("failed to get SNAT IP annotation for VirtualMachine %s/%s "+
-			"from VirtualNetwrok",
+			"from VirtualNetwork",
 			vmNamespace, vmName)
 	}
 	ip, err := getSnatIpFromNamespaceNetworkInfo(ctx, dc, vmNamespace, vmName)
@@ -443,7 +443,7 @@ func GetVCDatacentersFromConfig(cfg *config.Config) ([]string, commontypes.FQDN,
 		}
 	}
 	if len(dcList) == 0 {
-		return dcList, vcHost, errors.New("unable get vCenter datacenters from vsphere config")
+		return dcList, vcHost, errors.New("unable to get vCenter datacenters from vSphere config")
 	}
 	return dcList, vcHost, nil
 }
@@ -462,7 +462,7 @@ func GetVMFromVcenter(ctx context.Context, nodeUUID string,
 	for _, dc := range dcList {
 		vm, err := dc.GetVirtualMachineByUUID(ctx, nodeUUID, true)
 		if err != nil {
-			log.Errorf("failed to find the VM with UUID: %s on datacenter: %s Err: %+v",
+			log.Errorf("failed to find the VM with UUID: %s on datacenter: %s. Err: %+v",
 				nodeUUID, dc.Name(), err)
 			continue
 		}

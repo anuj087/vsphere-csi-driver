@@ -232,7 +232,7 @@ func (vm *VirtualMachine) GetAncestors(ctx context.Context) ([]mo.ManagedEntity,
 		log.Errorf("GetAncestors failed for %s with err %v", vmHost.Reference(), err)
 		return nil, err
 	}
-	log.Debugf("Ancestors of node vm: %v are : [%+v]", vm, objects)
+	log.Debugf("Ancestors of node vm: %v are: [%+v]", vm, objects)
 	return objects, nil
 }
 
@@ -264,7 +264,7 @@ func (vm *VirtualMachine) GetZoneRegion(ctx context.Context, zoneCategoryName st
 		for _, value := range tags {
 			tag, err := tagManager.GetTag(ctx, value)
 			if err != nil {
-				log.Errorf("failed to get tag:%s, error:%v", value, err)
+				log.Errorf("failed to get tag: %s, error: %v", value, err)
 				return "", "", err
 			}
 			log.Infof("Found tag: %s for object %v", tag.Name, obj)

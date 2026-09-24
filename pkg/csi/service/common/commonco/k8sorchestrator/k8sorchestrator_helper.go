@@ -95,7 +95,7 @@ func (c *K8sOrchestrator) updatePVCAnnotations(ctx context.Context,
 		}
 		_, err = c.k8sClient.CoreV1().PersistentVolumeClaims(pvcNamespace).Update(ctx, pvcObj, metav1.UpdateOptions{})
 		if err != nil {
-			log.Errorf("failed to update pvc annotations %s/%s with err:%+v", pvcNamespace, pvcName, err)
+			log.Errorf("failed to update pvc annotations %s/%s with err: %+v", pvcNamespace, pvcName, err)
 			return err
 		}
 		return nil

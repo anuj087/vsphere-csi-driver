@@ -401,7 +401,7 @@ func (c *controller) Init(config *cnsconfig.Config, version string) error {
 	err = common.CheckAPI(ctx, vc.Client.ServiceContent.About.ApiVersion, common.MinSupportedVCenterMajor,
 		common.MinSupportedVCenterMinor, common.MinSupportedVCenterPatch)
 	if err != nil {
-		log.Errorf("checkAPI failed for vcenter API version: %s, err=%v", vc.Client.ServiceContent.About.ApiVersion, err)
+		log.Errorf("checkAPI failed for vCenter API version: %s, err: %v", vc.Client.ServiceContent.About.ApiVersion, err)
 		return err
 	}
 
@@ -973,7 +973,7 @@ func (c *controller) createBlockVolume(ctx context.Context, req *csi.CreateVolum
 								ctx, snapshotID, pvcNamespace, zones)
 							if err != nil {
 								return nil, csifault.CSIInternalFault, logger.LogNewErrorCodef(log, codes.Internal,
-									"failed to find active clusters for the namespace: %q, err :%v", pvcNamespace, err)
+									"failed to find active clusters for the namespace: %q, err: %v", pvcNamespace, err)
 							}
 							log.Infof("vSphere clusters: %v for the namespace %q accessible to snapshot: %q",
 								vSphereClusterMorefs, pvcNamespace, snapshotID)
@@ -984,7 +984,7 @@ func (c *controller) createBlockVolume(ctx context.Context, req *csi.CreateVolum
 						GetActiveClustersForNamespaceInRequestedZones(ctx, pvcNamespace, zones)
 					if err != nil {
 						return nil, csifault.CSIInternalFault, logger.LogNewErrorCodef(log, codes.Internal,
-							"failed to find active clusters for the namespace: %q, err :%v", pvcNamespace, err)
+							"failed to find active clusters for the namespace: %q, err: %v", pvcNamespace, err)
 					}
 					log.Infof("Active vSphere clusters: %v for the namespace: %q", vSphereClusterMorefs, pvcNamespace)
 				}
@@ -1957,7 +1957,7 @@ func (c *controller) createFileVolume(ctx context.Context, req *csi.CreateVolume
 					GetActiveClustersForNamespaceInRequestedZones(ctx, pvcNamespace, zones)
 				if err != nil {
 					return nil, csifault.CSIInternalFault, logger.LogNewErrorCodef(log, codes.Internal,
-						"failed to find active clusters for the namespace: %q, err :%v", pvcNamespace, err)
+						"failed to find active clusters for the namespace: %q, err: %v", pvcNamespace, err)
 				}
 				log.Infof("Active vSphere clusters: %v for the namespace: %q", vSphereClusterMorefs, pvcNamespace)
 			} else {
@@ -2404,7 +2404,7 @@ func (c *controller) ControllerPublishVolume(ctx context.Context, req *csi.Contr
 			caps := []*csi.VolumeCapability{volCap}
 			if isSharedRawBlockRequest(ctx, caps) {
 				// Shared Disk feature is not supported for PodVMs.
-				err := fmt.Errorf("shared disks are not supportd for PodVMs. Invalid request %+v",
+				err := fmt.Errorf("shared disks are not supported for PodVMs. Invalid request %+v",
 					logger.RedactCSIRequest(req))
 				log.Errorf("failed to verify if volume is a shared disk. Err: %+v", err)
 				return nil, csifault.CSIInvalidArgumentFault, err
@@ -2597,12 +2597,12 @@ func (c *controller) ControllerUnpublishVolume(ctx context.Context, req *csi.Con
 						"Thus, assuming the volume is detached.", req.VolumeId, req.NodeId)
 					isVADeleted = true
 				} else {
-					log.Errorf("failed to retrieve volumeAttachment from API server Err: %v", err)
+					log.Errorf("failed to retrieve volumeAttachment from API server. Err: %v", err)
 					return nil, csifault.CSIInternalFault, err
 				}
 			}
 			if !isVADeleted {
-				log.Debugf("controllerUnpublishVolumeInternal: VA : %v", spew.Sdump(volumeAttachment))
+				log.Debugf("controllerUnpublishVolumeInternal: VA: %v", spew.Sdump(volumeAttachment))
 				for k, v := range volumeAttachment.Status.AttachmentMetadata {
 					if k == common.AttributeVmUUID {
 						log.Debugf("controllerUnpublishVolumeInternal: vmuuid value: %q", v)
@@ -2669,12 +2669,12 @@ func (c *controller) ControllerUnpublishVolume(ctx context.Context, req *csi.Con
 						"Thus, assuming the volume is detached.", req.VolumeId, req.NodeId)
 					isVADeleted = true
 				} else {
-					log.Errorf("failed to retrieve volumeAttachment from API server Err: %v", err)
+					log.Errorf("failed to retrieve volumeAttachment from API server. Err: %v", err)
 					return nil, csifault.CSIInternalFault, err
 				}
 			}
 			if !isVADeleted {
-				log.Debugf("controllerUnpublishVolumeInternal: VA : %v", spew.Sdump(volumeAttachment))
+				log.Debugf("controllerUnpublishVolumeInternal: VA: %v", spew.Sdump(volumeAttachment))
 				for k, v := range volumeAttachment.Status.AttachmentMetadata {
 					if k == common.AttributeVmUUID {
 						log.Debugf("controllerUnpublishVolumeInternal: vmuuid value: %q", v)
@@ -2907,7 +2907,7 @@ func (c *controller) ListVolumes(ctx context.Context, req *csi.ListVolumesReques
 
 			vmMoidToHostMoid, volumeIDToVMMap, err = c.GetVolumeToHostMapping(ctx, clusterMoIds)
 			if err != nil {
-				log.Errorf("failed to get VM MoID to Host MoID map, err:%v", err)
+				log.Errorf("failed to get VM MoID to Host MoID map, err: %v", err)
 				return nil, csifault.CSIInternalFault, status.Errorf(codes.Internal,
 					"failed to get VM MoID to Host MoID map: %v. Verify vCenter connectivity and that "+
 						"the ClusterComputeResource MoIDs in the config are correct.", err)
@@ -2919,7 +2919,7 @@ func (c *controller) ListVolumes(ctx context.Context, req *csi.ListVolumesReques
 		// cache is stale. So, fail the request and return an error
 		listVolumeThreshold := c.manager.VcenterConfig.ListVolumeThreshold
 		if len(k8sVolumeIDs)-len(cnsVolumeIDs) > listVolumeThreshold {
-			log.Errorf("Kubernetes and CNS volumes completely out of sync and exceeds the threshold: %d-%d=%d",
+			log.Errorf("Kubernetes and CNS volumes are completely out of sync and exceed the threshold: %d-%d=%d",
 				len(k8sVolumeIDs), len(cnsVolumeIDs), listVolumeThreshold)
 			return nil, csifault.CSIInternalFault, status.Error(codes.FailedPrecondition,
 				"Kubernetes and CNS volumes completely out of sync")
@@ -2946,7 +2946,7 @@ func (c *controller) ListVolumes(ctx context.Context, req *csi.ListVolumesReques
 
 		response, err := getVolumeIDToVMMap(ctx, volumeIDs, vmMoidToHostMoid, volumeIDToVMMap)
 		if err != nil {
-			log.Errorf("Error while generating ListVolume response, err:%v", err)
+			log.Errorf("error while generating ListVolume response, err: %v", err)
 			return nil, csifault.CSIInternalFault, status.Errorf(codes.Internal,
 				"Error while generating ListVolume response: %v. Retry after vCenter connectivity is "+
 					"restored; if the error persists, check CNS query logs for the affected volume IDs.", err)

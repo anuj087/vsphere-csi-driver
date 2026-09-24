@@ -239,14 +239,14 @@ func (c *controller) Init(config *cnsconfig.Config, version string) error {
 	}
 	vCenters, err := common.GetVCenters(ctx, c.managers)
 	if err != nil {
-		return logger.LogNewErrorf(log, "failed to get vcenters. err=%v", err)
+		return logger.LogNewErrorf(log, "failed to get vCenters. err=%v", err)
 	}
 	// Check vCenter API Version
 	for _, vc := range vCenters {
 		err = common.CheckAPI(ctx, vc.Client.ServiceContent.About.ApiVersion, common.MinSupportedVCenterMajor,
 			common.MinSupportedVCenterMinor, common.MinSupportedVCenterPatch)
 		if err != nil {
-			return logger.LogNewErrorf(log, "checkAPI failed for vcenter API version: %s for vCenter %s, err=%v",
+			return logger.LogNewErrorf(log, "checkAPI failed for vCenter API version: %s for vCenter %s, err=%v",
 				vc.Client.ServiceContent.About.ApiVersion, vc.Config.Host, err)
 		}
 	}
@@ -266,8 +266,8 @@ func (c *controller) Init(config *cnsconfig.Config, version string) error {
 		isvSANFileServicesSupported, err := c.managers.VcenterManager.IsvSANFileServicesSupported(ctx,
 			vcconfig.Host)
 		if err != nil {
-			return logger.LogNewErrorf(log, "failed to verify if vSAN file services is supported or not for vCenter: %s. "+
-				"Error:%+v", vcconfig.Host, err)
+			return logger.LogNewErrorf(log, "failed to verify if vSAN file service is supported or not for vCenter: %s. "+
+				"Error: %+v", vcconfig.Host, err)
 		}
 		if !isvSANFileServicesSupported {
 			allVCentersSupportvSANFileService = false
@@ -277,7 +277,7 @@ func (c *controller) Init(config *cnsconfig.Config, version string) error {
 			vcconfig.Host)
 		if err != nil {
 			return logger.LogNewErrorf(log, "failed to verify if CNS transaction is supported or not for vCenter: %s. "+
-				"Error:%+v", vcconfig.Host, err)
+				"Error: %+v", vcconfig.Host, err)
 		}
 		if !isCnsTransactionSupported {
 			allVCentersSupportCnsTransaction = false
@@ -777,7 +777,7 @@ func (c *controller) createBlockVolumeWithPlacementEngineForMultiVC(ctx context.
 		if c.managers.CnsConfig.Labels.TopologyCategories == "" && c.managers.CnsConfig.Labels.Zone == "" &&
 			c.managers.CnsConfig.Labels.Region == "" {
 			return nil, csifault.CSIInvalidArgumentFault, logger.LogNewErrorCode(log, codes.InvalidArgument,
-				"topology category names not specified in the vsphere config secret")
+				"topology category names not specified in the vSphere config secret")
 		}
 	}
 
@@ -850,7 +850,7 @@ func (c *controller) createBlockVolumeWithPlacementEngineForMultiVC(ctx context.
 						continue
 					}
 					return nil, csifault.CSIInternalFault, logger.LogNewErrorCodef(log, codes.Internal,
-						"failed to filter datastores based on authorisation check in vCenter %q. Error: %+v",
+						"failed to filter datastores based on authorization check in vCenter %q. Error: %+v",
 						vcHost, err)
 				}
 				volumeMgr, err = GetVolumeManagerFromVCHost(ctx, c.managers, vcHost)
@@ -1242,7 +1242,7 @@ func (c *controller) createFileVolume(ctx context.Context, req *csi.CreateVolume
 			if c.managers.CnsConfig.Labels.TopologyCategories == "" && c.managers.CnsConfig.Labels.Zone == "" &&
 				c.managers.CnsConfig.Labels.Region == "" {
 				return nil, csifault.CSIInvalidArgumentFault, logger.LogNewErrorCode(log, codes.InvalidArgument,
-					"topology category names not specified in the vsphere config secret")
+					"topology category names not specified in the vSphere config secret")
 			}
 		}
 
@@ -1489,8 +1489,8 @@ func (c *controller) CreateVolume(ctx context.Context, req *csi.CreateVolumeRequ
 						vcconfig.Host)
 					if err != nil {
 						return nil, csifault.CSIInternalFault, logger.LogNewErrorf(log,
-							"failed to verify if vSAN file services is supported or not for vCenter: %s. "+
-								"Error:%+v", vcconfig.Host, err)
+							"failed to verify if vSAN file service is supported or not for vCenter: %s. "+
+								"Error: %+v", vcconfig.Host, err)
 					}
 					if isvSANFileServicesSupported {
 						isvSANFileServicesDisabledInAllVCs = false
@@ -1507,7 +1507,7 @@ func (c *controller) CreateVolume(ctx context.Context, req *csi.CreateVolumeRequ
 					c.managers.CnsConfig.Global.VCenterIP)
 				if err != nil {
 					return nil, csifault.CSIInternalFault, logger.LogNewErrorCodef(log, codes.Internal,
-						"failed to verify if vSAN file services is supported or not. Error:%+v", err)
+						"failed to verify if vSAN file service is supported or not. Error: %+v", err)
 				}
 				if !isvSANFileServicesSupported {
 					return nil, csifault.CSIInternalFault, logger.LogNewErrorCode(log, codes.FailedPrecondition,
@@ -1773,9 +1773,9 @@ func (c *controller) ControllerPublishVolume(ctx context.Context, req *csi.Contr
 			}
 			if err != nil {
 				return nil, csifault.CSIInternalFault, logger.LogNewErrorCodef(log, codes.Internal,
-					"failed to find VirtualMachine for node:%q. Error: %v", req.NodeId, err)
+					"failed to find VirtualMachine for node: %q. Error: %v", req.NodeId, err)
 			}
-			log.Debugf("Found VirtualMachine for node:%q.", req.NodeId)
+			log.Debugf("Found VirtualMachine for node: %q.", req.NodeId)
 			// faultType is returned from manager.AttachVolume.
 			diskUUID, faultType, err := common.AttachVolumeUtil(ctx, volumeManager, nodevm, req.VolumeId,
 				false)
@@ -1893,7 +1893,7 @@ func (c *controller) ControllerUnpublishVolume(ctx context.Context, req *csi.Con
 				return &csi.ControllerUnpublishVolumeResponse{}, "", nil
 			} else {
 				return nil, csifault.CSIInternalFault, logger.LogNewErrorCodef(log, codes.Internal,
-					"failed to find VirtualMachine for node:%q. Error: %v", req.NodeId, err)
+					"failed to find VirtualMachine for node: %q. Error: %v", req.NodeId, err)
 			}
 		}
 		faultType, err = common.DetachVolumeUtil(ctx, volumeManager, nodevm, req.VolumeId)
@@ -2173,7 +2173,7 @@ func (c *controller) ListVolumes(ctx context.Context, req *csi.ListVolumesReques
 			CNSVolumesforListVolume)
 		if err != nil {
 			return nil, csifault.CSIInternalFault, fmt.Errorf("error while processing query results for list "+
-				" volumes, err: %v", err)
+				"volumes, err: %v", err)
 		}
 		resp := &csi.ListVolumesResponse{
 			Entries:   entries,
@@ -2227,7 +2227,7 @@ func (c *controller) processQueryResultsListVolumes(ctx context.Context, startin
 				if volID == fileVolID && len(nodeName) != 0 {
 					nodeVMObj, err := c.nodeMgr.GetNodeVMByNameAndUpdateCache(ctx, publishedNodeIds[fileVolID][0])
 					if err != nil {
-						log.Errorf("Failed to get node vm object from the node name, err:%v", err)
+						log.Errorf("failed to get node VM object from the node name, err: %v", err)
 						return entries, nextToken, volumeType, err
 					}
 					volCounter += 1
@@ -2264,7 +2264,7 @@ func (c *controller) processQueryResultsListVolumes(ctx context.Context, startin
 					migratedVolumePath, err := volumeMigrationService.GetVolumePathFromMigrationServiceCache(ctx, blockVolID)
 					if err != nil && err == common.ErrNotFound {
 						log.Debugf("volumeID: %v not found in migration service in-memory cache "+
-							"so it's not a migrated in-tree volume", blockVolID)
+							"so it is not a migrated in-tree volume", blockVolID)
 					} else if migratedVolumePath != "" {
 						volumeId = migratedVolumePath
 					}
@@ -2422,7 +2422,7 @@ func (c *controller) CreateSnapshot(ctx context.Context, req *csi.CreateSnapshot
 		// Check if the source volume is migrated vSphere volume
 		if strings.Contains(volumeID, ".vmdk") {
 			return nil, logger.LogNewErrorCodef(log, codes.Unimplemented,
-				"cannot snapshot migrated vSphere volume. :%q", volumeID)
+				"cannot snapshot migrated vSphere volume: %q", volumeID)
 		}
 		volumeType = prometheus.PrometheusBlockVolumeType
 		// Query capacity in MB and datastore url for block volume snapshot
@@ -2658,7 +2658,7 @@ func (c *controller) ListSnapshots(ctx context.Context, req *csi.ListSnapshotsRe
 			snapshots, nextToken, err = common.ListSnapshotsUtil(ctx, volManager, req.SourceVolumeId,
 				req.SnapshotId, req.StartingToken, maxEntries)
 			if err != nil {
-				return nil, logger.LogNewErrorCodef(log, codes.Internal, " failed to retrieve the snapshots, err: %+v", err)
+				return nil, logger.LogNewErrorCodef(log, codes.Internal, "failed to retrieve the snapshots, err: %+v", err)
 			}
 		} else if req.SourceVolumeId != "" {
 			// Fetch vCenterHost & volumeManager for source volume, based on VC configuration
@@ -2681,12 +2681,12 @@ func (c *controller) ListSnapshots(ctx context.Context, req *csi.ListSnapshotsRe
 			snapshots, nextToken, err = common.ListSnapshotsUtil(ctx, volManager, req.SourceVolumeId,
 				req.SnapshotId, req.StartingToken, maxEntries)
 			if err != nil {
-				return nil, logger.LogNewErrorCodef(log, codes.Internal, " failed to retrieve the snapshots, err: %+v", err)
+				return nil, logger.LogNewErrorCodef(log, codes.Internal, "failed to retrieve the snapshots, err: %+v", err)
 			}
 		} else {
 			snapshots, nextToken, err = queryAllVolumeSnapshotsForMultiVC(ctx, c, req.StartingToken, maxEntries)
 			if err != nil {
-				return nil, logger.LogNewErrorCodef(log, codes.Internal, " failed to retrieve the snapshots, err: %+v", err)
+				return nil, logger.LogNewErrorCodef(log, codes.Internal, "failed to retrieve the snapshots, err: %+v", err)
 			}
 		}
 		var entries []*csi.ListSnapshotsResponse_Entry
@@ -2798,7 +2798,7 @@ func queryAllVolumeSnapshotsForMultiVC(ctx context.Context, c *controller, token
 	if token != "" {
 		startingToken, err = strconv.Atoi(token)
 		if err != nil {
-			log.Errorf("failed to parse the token: %s err: %v", token, err)
+			log.Errorf("failed to parse the token: %s. err: %v", token, err)
 			return nil, "", err
 		}
 	}
@@ -2828,7 +2828,7 @@ func queryAllVolumeSnapshotsForMultiVC(ctx context.Context, c *controller, token
 		maxEntries, CNSSnapshotsForListSnapshots)
 	if err != nil {
 		return nil, csifault.CSIInternalFault, fmt.Errorf("error while processing query results for list "+
-			" snapshots, err: %v", err)
+			"snapshots, err: %v", err)
 	}
 	for _, queryResult := range finalSnapEntries {
 		snapshotCreateTimeInProto := timestamppb.New(queryResult.Snapshot.CreateTime)
